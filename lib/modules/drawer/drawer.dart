@@ -1,19 +1,27 @@
+import 'dart:math';
 
 import 'package:animator/animator.dart';
 import 'package:cryptomarket/constance/constance.dart';
 import 'package:cryptomarket/constance/global.dart';
 import 'package:cryptomarket/constance/themes.dart';
+import 'package:cryptomarket/modules/deposite/depositeCurrency.dart';
+import 'package:cryptomarket/modules/home/homeScreen.dart';
+import 'package:cryptomarket/modules/home/staking.dart';
+import 'package:cryptomarket/modules/muitisig/multisig.dart';
+import 'package:cryptomarket/modules/myWallet/wallet.dart';
+import 'package:cryptomarket/modules/tradingPair/tradingPair.dart';
+import 'package:cryptomarket/modules/withdraw/withdrawCurrency.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:cryptomarket/constance/global.dart' as globals;
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:cryptomarket/api/apiProvider.dart';
-import 'package:cryptomarket/model/liveCryptoNewsModel.dart';
-import 'package:cryptomarket/modules/news/newsDescription.dart';
+
+import '../home/settings.dart';
+import '../news/latestCryptoNews.dart';
 
 class AppDrawer extends StatefulWidget {
+  final String selectItemName;
 
-  const AppDrawer({key}) : super(key: key);
+  const AppDrawer({key, required this.selectItemName}) : super(key: key);
   @override
   _AppDrawerState createState() => _AppDrawerState();
 }
@@ -21,225 +29,395 @@ class AppDrawer extends StatefulWidget {
 var appBarheight = 0.0;
 
 class _AppDrawerState extends State<AppDrawer> {
-  var appBarheight = 0.0;
-  bool _isInProgress = false;
-
-  late CryptoNewsLive cryptoNewsLive;
-
-  @override
-  void initState() {
-    super.initState();
-    getLatestNews();
-  }
-
-  getLatestNews() async {
-    setState(() {
-      _isInProgress = true;
-    });
-    cryptoNewsLive = await ApiProvider().cryptoNews('Bitcoin');
-    setState(() {
-      _isInProgress = false;
-    });
-  }
   @override
   Widget build(BuildContext context) {
     AppBar appBar = AppBar();
     appBarheight = appBar.preferredSize.height;
     return Container(
       color: AllCoustomTheme.getThemeData().primaryColor,
-      child: ListView.builder(
+      child: SingleChildScrollView(
         physics: BouncingScrollPhysics(),
-        padding: EdgeInsets.only(left: 16, top: 0),
-        itemCount: cryptoNewsLive.articles!.length,
-        itemBuilder: (BuildContext context, int index) {
-          return Animator<double>(
-            duration: Duration(milliseconds: 500),
-            curve: Curves.decelerate,
-            cycles: 1,
-            builder: (_, anim, __) => Transform.scale(
-              scale: anim.value,
-              child: InkWell(
-                highlightColor: Colors.transparent,
-                splashColor: Colors.transparent,
-                onTap: () {
-                  Navigator.of(context).push(
-                    CupertinoPageRoute(
-                      builder: (BuildContext context) => NewsDescription(
-                        title: cryptoNewsLive.articles![index].title,
-                        url: cryptoNewsLive.articles![index].url,
-                      ),
-                    ),
-                  );
-                },
-                child: Column(
-                  children: <Widget>[
-                    MagicBoxGradiantLine(
-                      height: 3,
-                    ),
-                    Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.only(
-                          bottomLeft: Radius.circular(27),
+        child: Column(
+          children: <Widget>[
+            SizedBox(
+              height: appBarheight + 10,
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 16),
+              child: Row(
+                children: <Widget>[
+                  Animator<double>(
+                    tween: Tween<double>(begin: 0, end: 1),
+                    duration: Duration(milliseconds: 500),
+                    cycles: 1,
+                    builder: (_, anim, __) => SizeTransition(
+                      sizeFactor: anim.animation,
+                      axis: Axis.horizontal,
+                      axisAlignment: 1,
+                      child: Text(
+                        signedInUser,
+                        style: TextStyle(
+                          fontSize: 15,
+                          color: AllCoustomTheme.getTextThemeColors(),
+                          fontWeight: FontWeight.bold,
                         ),
-                        color: AllCoustomTheme.boxColor(),
-                      ),
-                      child: Column(
-                        children: <Widget>[
-                          Card(
-                            semanticContainer: true,
-                            clipBehavior: Clip.antiAliasWithSaveLayer,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.only(
-                                bottomLeft: Radius.circular(20),
-                              ),
-                            ),
-                            margin: EdgeInsets.all(0),
-                            // ignore: unnecessary_null_comparison
-                            child: cryptoNewsLive.articles![index] != null &&
-                                // ignore: unnecessary_null_comparison
-                                cryptoNewsLive.articles![index].urlToImage != null &&
-                                cryptoNewsLive.articles![index].urlToImage != ''
-                                ? CachedNetworkImage(
-                              errorWidget: (context, url, error) => CircleAvatar(
-                                backgroundColor: AllCoustomTheme.getsecoundTextThemeColor(),
-                                child: Icon(
-                                  Icons.error_outline,
-                                ),
-                              ),
-                              imageUrl: cryptoNewsLive.articles![index].urlToImage,
-                              fit: BoxFit.fill,
-                            )
-                                : SizedBox(),
-                          ),
-                          SizedBox(
-                            height: 6,
-                          ),
-                          Text(
-                            // ignore: unnecessary_null_comparison
-                            cryptoNewsLive.articles![index].title != null && cryptoNewsLive.articles![index].title != ""
-                                ? cryptoNewsLive.articles![index].title
-                                : "",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: AllCoustomTheme.getTextThemeColors(),
-                              fontSize: ConstanceData.SIZE_TITLE14,
-                            ),
-                          ),
-                          SizedBox(
-                            height: 6,
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(left: 10, right: 10),
-                            child: Text(
-                              // ignore: unnecessary_null_comparison
-                              cryptoNewsLive.articles![index].description != null &&
-                                  cryptoNewsLive.articles![index].description != ""
-                                  ? cryptoNewsLive.articles![index].description
-                                  : "",
-                              textAlign: TextAlign.start,
-                              style: TextStyle(
-                                color: AllCoustomTheme.getsecoundTextThemeColor(),
-                                fontSize: ConstanceData.SIZE_TITLE14,
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(left: 10, right: 10, bottom: 10),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: <Widget>[
-                                Column(
-                                  children: <Widget>[
-                                    Text(
-                                      'Author',
-                                      style: TextStyle(
-                                        color: AllCoustomTheme.getTextThemeColors(),
-                                        fontSize: ConstanceData.SIZE_TITLE14,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      height: 2,
-                                    ),
-                                    Text(
-                                      // ignore: unnecessary_null_comparison
-                                      cryptoNewsLive.articles![index].author != null && cryptoNewsLive.articles![index].author != ""
-                                          ? cryptoNewsLive.articles![index].author
-                                          : "",
-                                      style: TextStyle(
-                                        color: AllCoustomTheme.getsecoundTextThemeColor(),
-                                        fontSize: ConstanceData.SIZE_TITLE14,
-                                      ),
-                                    )
-                                  ],
-                                ),
-                                Flexible(
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(right: 10),
-                                    child: Text(
-                                      getConvertTime(
-                                        cryptoNewsLive.articles![index].publishedAt.toString(),
-                                      ),
-                                      style: TextStyle(
-                                        color: AllCoustomTheme.getTextThemeColors(),
-                                        fontSize: ConstanceData.SIZE_TITLE12,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                Flexible(
-                                  child: Animator<double>(
-                                    tween: Tween<double>(begin: 0.8, end: 1.1),
-                                    curve: Curves.easeInToLinear,
-                                    cycles: 0,
-                                    builder: (_, anim, __) => Transform.scale(
-                                      scale: anim.value,
-                                      child: Container(
-                                        height: 28,
-                                        width: 28,
-                                        decoration: BoxDecoration(
-                                          border: new Border.all(color: Colors.white, width: 1.5),
-                                          shape: BoxShape.circle,
-                                          gradient: LinearGradient(
-                                            begin: Alignment.topLeft,
-                                            end: Alignment.bottomRight,
-                                            colors: [
-                                              globals.buttoncolor1,
-                                              globals.buttoncolor2,
-                                            ],
-                                          ),
-                                        ),
-                                        child: Padding(
-                                          padding: const EdgeInsets.only(left: 3),
-                                          child: Icon(
-                                            Icons.arrow_forward_ios,
-                                            size: 14,
-                                            color: AllCoustomTheme.getTextThemeColors(),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                )
-                              ],
-                            ),
-                          ),
-                        ],
                       ),
                     ),
-                    SizedBox(
-                      height: 16,
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Animator<double>(
+              tween: Tween<double>(begin: 0, end: 1),
+              duration: Duration(milliseconds: 500),
+              cycles: 1,
+              builder: (_, anim, __) => SizeTransition(
+                sizeFactor: anim.animation,
+                axis: Axis.horizontal,
+                axisAlignment: 1,
+                child: Container(
+                  height: 1.2,
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.only(bottomLeft: Radius.circular(2)),
+                    gradient: LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [
+                        buttoncolor1,
+                        buttoncolor2,
+                      ],
                     ),
-                  ],
+                  ),
                 ),
               ),
             ),
-          );
-        },
+            SizedBox(
+              height: 10,
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 18),
+              child: Column(
+                children: <Widget>[
+                  SizedBox(
+                    height: 20,
+                  ),
+                  SingleChildScrollView(
+                    physics: BouncingScrollPhysics(),
+                    child: Column(
+                      children: <Widget>[
+                        InkWell(
+                          highlightColor: Colors.transparent,
+                          splashColor: Colors.transparent,
+                          onTap: () {
+                            Navigator.pop(context);
+                            Navigator.of(context).push(
+                              CupertinoPageRoute<void>(
+                                builder: (BuildContext context) => HomeScreen(),
+                              ),
+                            );
+                          },
+                          child: Row(
+                            children: <Widget>[
+                              Animator<double>(
+                                tween: Tween<double>(begin: 0, end: 1),
+                                duration: Duration(milliseconds: 500),
+                                cycles: 1,
+                                builder: (_, anim, __) => SizeTransition(
+                                  sizeFactor: anim.animation,
+                                  axis: Axis.horizontal,
+                                  axisAlignment: 1,
+                                  child: Icon(
+                                    Icons.account_balance_wallet,
+                                    color: AllCoustomTheme.getsecoundTextThemeColor(),
+                                    size: 20,
+                                  ),
+                                ),
+                              ),
+                              SizedBox(
+                                width: 14,
+                              ),
+                              Animator<double>(
+                                tween: Tween<double>(begin: 0, end: 1),
+                                duration: Duration(milliseconds: 500),
+                                cycles: 1,
+                                builder: (_, anim, __) => SizeTransition(
+                                  sizeFactor: anim.animation,
+                                  axis: Axis.horizontal,
+                                  axisAlignment: 1,
+                                  child: Text(
+                                    'Wallet',
+                                    style: TextStyle(
+                                      color: AllCoustomTheme.getTextThemeColors(),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                child: SizedBox(),
+                              ),
+                              widget.selectItemName == 'wallet'
+                                  ? Padding(
+                                padding: const EdgeInsets.only(right: 14),
+                                child: Animator<double>(
+                                  duration: Duration(milliseconds: 500),
+                                  curve: Curves.decelerate,
+                                  cycles: 1,
+                                  builder: (_, anim, __) => Transform.scale(
+                                    scale: anim.value,
+                                    child: CircleAvatar(
+                                      backgroundColor: globals.buttoncolor2,
+                                      radius: 5,
+                                    ),
+                                  ),
+                                ),
+                              )
+                                  : SizedBox(),
+                            ],
+                          ),
+                        ),
+                        SizedBox(
+                          height: 20,
+                        ),
+
+                        InkWell(
+                          highlightColor: Colors.transparent,
+                          splashColor: Colors.transparent,
+                          onTap: () {
+                            Navigator.pop(context);
+                            Navigator.of(context).push(
+                              CupertinoPageRoute<void>(
+                                builder: (BuildContext context) => StakeScreen(),
+                              ),
+                            );
+                          },
+                          child: Row(
+                            children: <Widget>[
+                              Animator<double>(
+                                tween: Tween<double>(begin: 0, end: 1),
+                                duration: Duration(milliseconds: 500),
+                                cycles: 1,
+                                builder: (_, anim, __) => SizeTransition(
+                                  sizeFactor: anim.animation,
+                                  axis: Axis.horizontal,
+                                  axisAlignment: 1,
+                                  child: Icon(
+                                    Icons.markunread_mailbox,
+                                    color: AllCoustomTheme.getsecoundTextThemeColor(),
+                                    size: 20,
+                                  ),
+                                ),
+                              ),
+                              SizedBox(
+                                width: 14,
+                              ),
+                              Animator<double>(
+                                tween: Tween<double>(begin: 0, end: 1),
+                                duration: Duration(milliseconds: 500),
+                                cycles: 1,
+                                builder: (_, anim, __) => SizeTransition(
+                                  sizeFactor: anim.animation,
+                                  axis: Axis.horizontal,
+                                  axisAlignment: 1,
+                                  child: Text(
+                                    'Live Staking',
+                                    style: TextStyle(
+                                      color: AllCoustomTheme.getTextThemeColors(),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                child: SizedBox(),
+                              ),
+                              widget.selectItemName == 'staking'
+                                  ? Padding(
+                                padding: const EdgeInsets.only(right: 14),
+                                child: Animator<double>(
+                                  duration: Duration(milliseconds: 500),
+                                  curve: Curves.decelerate,
+                                  cycles: 1,
+                                  builder: (_, anim, __) => SizeTransition(
+                                    sizeFactor: anim.animation,
+                                    axis: Axis.horizontal,
+                                    axisAlignment: 1,
+                                    child: CircleAvatar(
+                                      backgroundColor: globals.buttoncolor2,
+                                      radius: 5,
+                                    ),
+                                  ),
+                                ),
+                              )
+                                  : SizedBox(),
+                            ],
+                          ),
+                        ),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        InkWell(
+                          highlightColor: Colors.transparent,
+                          splashColor: Colors.transparent,
+                          onTap: () {
+                            Navigator.pop(context);
+                            Navigator.of(context).push(
+                              CupertinoPageRoute<void>(
+                                builder: (BuildContext context) => DepositeCurrency(),
+                              ),
+                            );
+                          },
+                          child: Row(
+                            children: <Widget>[
+                              Animator<double>(
+                                tween: Tween<double>(begin: 0, end: 1),
+                                duration: Duration(milliseconds: 500),
+                                cycles: 1,
+                                builder: (_, anim, __) => SizeTransition(
+                                  sizeFactor: anim.animation,
+                                  axis: Axis.horizontal,
+                                  axisAlignment: 1,
+                                  child: Icon(
+                                    Icons.arrow_upward,
+                                    color: AllCoustomTheme.getsecoundTextThemeColor(),
+                                    size: 20,
+                                  ),
+                                ),
+                              ),
+                              SizedBox(
+                                width: 14,
+                              ),
+                              Animator<double>(
+                                tween: Tween<double>(begin: 0, end: 1),
+                                duration: Duration(milliseconds: 500),
+                                cycles: 1,
+                                builder: (_, anim, __) => SizeTransition(
+                                  sizeFactor: anim.animation,
+                                  axis: Axis.horizontal,
+                                  axisAlignment: 1,
+                                  child: Text(
+                                    'Transaction History',
+                                    style: TextStyle(
+                                      color: AllCoustomTheme.getTextThemeColors(),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                child: SizedBox(),
+                              ),
+                              widget.selectItemName == 'history'
+                                  ? Padding(
+                                padding: const EdgeInsets.only(right: 14),
+                                child: Animator<double>(
+                                  duration: Duration(milliseconds: 500),
+                                  curve: Curves.decelerate,
+                                  cycles: 1,
+                                  builder: (_, anim, __) => Transform.scale(
+                                    scale: anim.value,
+                                    child: CircleAvatar(
+                                      backgroundColor: globals.buttoncolor2,
+                                      radius: 5,
+                                    ),
+                                  ),
+                                ),
+                              )
+                                  : SizedBox(),
+                            ],
+                          ),
+                        ),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        InkWell(
+                          onTap: (){
+                            Navigator.of(context).push(
+                              CupertinoPageRoute(
+                                builder: (BuildContext context) => Settings(),
+                              ),
+                            );
+                          },
+                          child: Row(
+                            children: <Widget>[
+                              Animator<double>(
+                                tween: Tween<double>(begin: 0, end: 2 * pi),
+                                duration: Duration(milliseconds: 500),
+                                cycles: 0,
+                                builder: (_, anim, __) => Transform.rotate(
+                                  angle: anim.value,
+                                  child: Icon(
+                                    Icons.settings,
+                                    color: AllCoustomTheme.getsecoundTextThemeColor(),
+                                    size: 20,
+                                  ),
+                                ),
+                              ),
+                              SizedBox(
+                                width: 14,
+                              ),
+                              Text(
+                                'Settings',
+                                style: TextStyle(
+                                  color: AllCoustomTheme.getTextThemeColors(),
+                                ),
+                              ),
+                              Expanded(
+                                child: SizedBox(),
+                              ),
+                            ],
+                          ),
+                        ),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        InkWell(
+                          onTap: (){
+                            Navigator.of(context).push(
+                              CupertinoPageRoute(
+                                builder: (BuildContext context) => CryptoNews(),
+                              ),
+                            );
+                          },
+                          child: Row(
+                            children: <Widget>[
+                              Animator<double>(
+                                tween: Tween<double>(begin: 0, end: 2 * pi),
+                                duration: Duration(milliseconds: 500),
+                                cycles: 0,
+                                builder: (_, anim, __) => Transform.rotate(
+                                  angle: anim.value,
+                                  child: Icon(
+                                    Icons.newspaper,
+                                    color: AllCoustomTheme.getsecoundTextThemeColor(),
+                                    size: 20,
+                                  ),
+                                ),
+                              ),
+                              SizedBox(
+                                width: 14,
+                              ),
+                              Text(
+                                'News',
+                                style: TextStyle(
+                                  color: AllCoustomTheme.getTextThemeColors(),
+                                ),
+                              ),
+                              Expanded(
+                                child: SizedBox(),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  )
+                ],
+              ),
+            )
+          ],
+        ),
       ),
     );
   }

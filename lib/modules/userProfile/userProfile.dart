@@ -2,6 +2,7 @@ import 'package:animator/animator.dart';
 import 'package:cryptomarket/constance/constance.dart';
 import 'package:cryptomarket/constance/global.dart';
 import 'package:cryptomarket/constance/themes.dart';
+import 'package:cryptomarket/modules/chagePIN/changePassword.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:cryptomarket/constance/global.dart' as globals;
@@ -168,19 +169,28 @@ class _UserProfileState extends State<UserProfile> {
                             SizedBox(
                               height: 10,
                             ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: <Widget>[
-                                Text(
-                                  'Change Password',
-                                  style: TextStyle(
-                                    color: AllCoustomTheme.getTextThemeColors(),
+                            InkWell(
+                              onTap: (){
+                                Navigator.of(context).push(
+                                  CupertinoPageRoute(
+                                    builder: (BuildContext context) => ChangePassword(),
                                   ),
-                                ),
-                                AnimatedForwardArrow(
-                                  isShowingarroeForward: true,
-                                ),
-                              ],
+                                );
+                              },
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: <Widget>[
+                                  Text(
+                                    'Change Password',
+                                    style: TextStyle(
+                                      color: AllCoustomTheme.getTextThemeColors(),
+                                    ),
+                                  ),
+                                  AnimatedForwardArrow(
+                                    isShowingarroeForward: true,
+                                  ),
+                                ],
+                              ),
                             ),
                             SizedBox(
                               height: 8,
@@ -191,20 +201,6 @@ class _UserProfileState extends State<UserProfile> {
                             ),
                             SizedBox(
                               height: 10,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: <Widget>[
-                                Text(
-                                  'Delete account',
-                                  style: TextStyle(
-                                    color: AllCoustomTheme.getTextThemeColors(),
-                                  ),
-                                ),
-                                AnimatedForwardArrow(
-                                  isShowingarroeForward: true,
-                                ),
-                              ],
                             ),
                           ],
                         ),

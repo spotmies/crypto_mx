@@ -119,7 +119,7 @@ class _ChangePINCodeState extends State<ChangePINCode> {
                               builder: (_, anim, __) => Transform.scale(
                                 scale: anim.value,
                                 child: Text(
-                                  'Enter PIN-Code',
+                                  'Enter the Password',
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
                                     color: AllCoustomTheme.getTextThemeColors(),
