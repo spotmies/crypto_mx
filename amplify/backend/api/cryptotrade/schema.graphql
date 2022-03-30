@@ -1,0 +1,25 @@
+# This "input" configures a global authorization rule to enable public access to
+# all models in this schema. Learn more about authorization rules here: https://docs.amplify.aws/cli/graphql/authorization-rules
+input AMPLIFY { globalAuthRule: AuthRule = { allow: public } } # FOR TESTING ONLY!
+
+type Transaction @model {
+  username: String!
+  transactionId: String!
+  percentage: Float!
+  daysToHold: Int!
+  amount: Float!
+  timeStamp: String!
+  approve: Boolean!
+  withdrawTimeLocal: String!
+  withDrawPrinciple: Boolean!
+  transactionStatus: Boolean!
+  coinName: String!
+  withDrawEarning: Boolean!
+  coinSymbol: String!
+}
+type Withdraw @model{
+  username: String!
+  withdraw: Float!
+  status: Boolean!
+  address: String!
+}

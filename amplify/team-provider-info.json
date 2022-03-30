@@ -1,0 +1,20 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-cryptotrade-dev-193839-authRole",
+      "UnauthRoleArn": "arn:aws:iam::135723222753:role/amplify-cryptotrade-dev-193839-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::135723222753:role/amplify-cryptotrade-dev-193839-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-cryptotrade-dev-193839-deployment",
+      "UnauthRoleName": "amplify-cryptotrade-dev-193839-unauthRole",
+      "StackName": "amplify-cryptotrade-dev-193839",
+      "StackId": "arn:aws:cloudformation:us-east-1:135723222753:stack/amplify-cryptotrade-dev-193839/ee0b46c0-a6c4-11ec-b4c0-12a0ace2d6d3",
+      "AmplifyAppId": "d66w6bkhsivoj"
+    },
+    "categories": {
+      "auth": {
+        "cryptotrade96308e5e": {}
+      }
+    }
+  }
+}

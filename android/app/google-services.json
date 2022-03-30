@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "950075868528",
+    "project_id": "cryptomx-7c996",
+    "storage_bucket": "cryptomx-7c996.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:950075868528:android:99170b8b4aafabf3ebbbb5",
+        "android_client_info": {
+          "package_name": "com.cryptotrade.cryptotrade"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "950075868528-39qjoob2j8ams9mjc31gpolv8c5ven86.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAXLmmRD0MwZfbNFjybbGnORpAJ7zPf4TY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "950075868528-39qjoob2j8ams9mjc31gpolv8c5ven86.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

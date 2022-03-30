@@ -1,0 +1,34 @@
+{
+  "version": 1,
+  "serviceConfiguration": {
+    "apiName": "cryptotrade",
+    "serviceName": "AppSync",
+    "gqlSchemaPath": "/Users/keerthannekkanti/cryptotrade/amplify/backend/api/cryptotrade/schema.graphql",
+    "defaultAuthType": {
+      "mode": "API_KEY",
+      "expirationTime": 365,
+      "apiKeyExpirationDate": "2023-03-25T12:27:07.429Z",
+      "keyDescription": "this is the api key used for cloud storage"
+    },
+    "conflictResolution": {
+      "defaultResolutionStrategy": {
+        "type": "AUTOMERGE"
+      },
+      "perModelResolutionStrategy": [
+        {
+          "resolutionStrategy": {
+            "type": "AUTOMERGE"
+          },
+          "entityName": "Transaction"
+        },
+        {
+          "resolutionStrategy": {
+            "type": "AUTOMERGE"
+          },
+          "entityName": "Withdraw"
+        }
+      ]
+    },
+    "additionalAuthTypes": []
+  }
+}
