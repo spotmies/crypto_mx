@@ -12,12 +12,15 @@ class TransactionInfo extends StatefulWidget {
 }
 
 class _TransactionInfoState extends State<TransactionInfo> {
+  var walletAddressController;
+  var wAdd;
 
 
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     var width = size.width;
+    var height = size.height;
     return Scaffold(
       appBar: AppBar(
         title: Text("Transaction Info"),
@@ -179,6 +182,51 @@ class _TransactionInfoState extends State<TransactionInfo> {
             ],
           ),
           SizedBox(height: 20,),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text("Wallet Adress",
+                style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 25
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: 10,),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SizedBox(
+                width: width*0.9,
+                child: TextField(
+                  controller: walletAddressController,
+                  decoration: InputDecoration(
+                    hintStyle: TextStyle(color: Colors.grey),
+                    hintText: 'Enter Wallet Adddress',
+                    fillColor: Colors.white,
+                    filled: true,
+                    hoverColor: Colors.white,
+                    focusColor: Colors.white,
+                    alignLabelWithHint: true,
+                    errorText: null,
+                    labelStyle: TextStyle(color: Colors.white),
+                    contentPadding:
+                    EdgeInsets.symmetric(vertical: height*0.01, horizontal: width*0.1),
+                    border: const OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(32.0)),
+                      borderSide: const BorderSide(color: Colors.white, width: 2.0),
+                    ),
+                  ),
+                  onChanged: (value){
+                    wAdd = value;
+                  },
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: 20,),
           SizedBox(
             width: width*0.75,
             child: ElevatedButton(
@@ -210,7 +258,7 @@ class _TransactionInfoState extends State<TransactionInfo> {
                 var newTransact = oldTransact.copyWith(id: oldTransact.id,withDrawEarning: true);
                 Amplify.DataStore.save(newTransact);
                 var earning = transaction.percentage*transaction.amount*daysEarned*0.01;
-                var withdraw = new Withdraw(status: false,username: signedInUser,withdraw: earning,address: 'adfuu123');
+                var withdraw = new Withdraw(status: false,username: signedInUser,withdraw: earning,address: wAdd);
                 Amplify.DataStore.save(withdraw);
 
               },
@@ -250,7 +298,7 @@ class _TransactionInfoState extends State<TransactionInfo> {
                 var newTransact = oldTransact.copyWith(id: oldTransact.id,withDrawPrinciple: true);
                 Amplify.DataStore.save(newTransact);
                 var earning = transaction.amount;
-                var withdraw = new Withdraw(status: false,username: signedInUser,withdraw: earning,address: 'affg23');
+                var withdraw = new Withdraw(status: false,username: signedInUser,withdraw: earning,address: wAdd);
                 Amplify.DataStore.save(withdraw);
 
               },

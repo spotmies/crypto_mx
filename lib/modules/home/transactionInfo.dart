@@ -12,12 +12,15 @@ class TransactionInfo extends StatefulWidget {
 }
 
 class _TransactionInfoState extends State<TransactionInfo> {
+  var walletAddressController;
+  var wAdd;
 
 
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     var width = size.width;
+    var height = size.height;
     return Scaffold(
       appBar: AppBar(
         title: Text("Transaction Info"),
@@ -182,6 +185,54 @@ class _TransactionInfoState extends State<TransactionInfo> {
                 ),
               ],
             ), ),
+          SizedBox(height: 20,),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text("Wallet Adress",
+                style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 25
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: 10,),
+          Visibility(
+            visible: (vis2 && vis4) || vis3,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(
+                  width: width*0.9,
+                  child: TextField(
+                    controller: walletAddressController,
+                    decoration: InputDecoration(
+                      hintStyle: TextStyle(color: Colors.grey),
+                      hintText: 'Enter Wallet Adddress',
+                      fillColor: Colors.white,
+                      filled: true,
+                      hoverColor: Colors.white,
+                      focusColor: Colors.white,
+                      alignLabelWithHint: true,
+                      errorText: null,
+                      labelStyle: TextStyle(color: Colors.white),
+                      contentPadding:
+                      EdgeInsets.symmetric(vertical: height*0.01, horizontal: width*0.1),
+                      border: const OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(32.0)),
+                        borderSide: const BorderSide(color: Colors.white, width: 2.0),
+                      ),
+                    ),
+                    onChanged: (value){
+                      wAdd = value;
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ),
           Visibility(
               visible: vis2 && vis4,
               child:SizedBox(
