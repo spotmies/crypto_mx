@@ -136,8 +136,8 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       body: Container(
         height: height,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
+        child: ListView(
+          shrinkWrap: true,
           children: <Widget>[
             SizedBox(height: height*0.1,),
             Padding(
