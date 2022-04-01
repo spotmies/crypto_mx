@@ -169,7 +169,7 @@ class _TransactionPageState extends State<TransactionPage> {
                   ),
                 ),
                 onPressed: () async{
-                  var transact = new Transaction(amount: this.amount.toDouble(), transactionId: this.transact_id,username:signedInUser,approve: false,daysToHold: daysToHold.toInt(),percentage: percentage.toDouble(),timeStamp: DateTime.now().toIso8601String(),transactionStatus: true,withDrawPrinciple: false,withdrawTimeLocal: DateTime.parse('2000-07-28 05:47:04Z').toIso8601String(),coinName: coinName,withDrawEarning: false,coinSymbol: coinSymbol);
+                  var transact = new Transaction(amount: this.amount.toDouble(), transactionId: this.transact_id,username:signedInUser,approve: false,daysToHold: daysToHold.toInt(),percentage: percentage.toDouble(),timeStamp: DateTime.now().toIso8601String(),transactionStatus: true,withDrawPrinciple: false,withdrawTimeLocal: DateTime.parse('2000-07-28 05:47:04Z').toIso8601String(),coinName: coinName,withDrawEarning: false);
                   await Amplify.DataStore.save(transact);
                   setState(() {
                     String msg = "";

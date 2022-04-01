@@ -40,7 +40,6 @@ class Transaction extends Model {
   final bool? _transactionStatus;
   final String? _coinName;
   final bool? _withDrawEarning;
-  final String? _coinSymbol;
   final TemporalDateTime? _createdAt;
   final TemporalDateTime? _updatedAt;
 
@@ -208,19 +207,6 @@ class Transaction extends Model {
     }
   }
   
-  String get coinSymbol {
-    try {
-      return _coinSymbol!;
-    } catch(e) {
-      throw new AmplifyCodeGenModelException(
-          AmplifyExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
-          recoverySuggestion:
-            AmplifyExceptionMessages.codeGenRequiredFieldForceCastRecoverySuggestion,
-          underlyingException: e.toString()
-          );
-    }
-  }
-  
   TemporalDateTime? get createdAt {
     return _createdAt;
   }
@@ -229,9 +215,9 @@ class Transaction extends Model {
     return _updatedAt;
   }
   
-  const Transaction._internal({required this.id, required username, required transactionId, required percentage, required daysToHold, required amount, required timeStamp, required approve, required withdrawTimeLocal, required withDrawPrinciple, required transactionStatus, required coinName, required withDrawEarning, required coinSymbol, createdAt, updatedAt}): _username = username, _transactionId = transactionId, _percentage = percentage, _daysToHold = daysToHold, _amount = amount, _timeStamp = timeStamp, _approve = approve, _withdrawTimeLocal = withdrawTimeLocal, _withDrawPrinciple = withDrawPrinciple, _transactionStatus = transactionStatus, _coinName = coinName, _withDrawEarning = withDrawEarning, _coinSymbol = coinSymbol, _createdAt = createdAt, _updatedAt = updatedAt;
+  const Transaction._internal({required this.id, required username, required transactionId, required percentage, required daysToHold, required amount, required timeStamp, required approve, required withdrawTimeLocal, required withDrawPrinciple, required transactionStatus, required coinName, required withDrawEarning, createdAt, updatedAt}): _username = username, _transactionId = transactionId, _percentage = percentage, _daysToHold = daysToHold, _amount = amount, _timeStamp = timeStamp, _approve = approve, _withdrawTimeLocal = withdrawTimeLocal, _withDrawPrinciple = withDrawPrinciple, _transactionStatus = transactionStatus, _coinName = coinName, _withDrawEarning = withDrawEarning, _createdAt = createdAt, _updatedAt = updatedAt;
   
-  factory Transaction({String? id, required String username, required String transactionId, required double percentage, required int daysToHold, required double amount, required String timeStamp, required bool approve, required String withdrawTimeLocal, required bool withDrawPrinciple, required bool transactionStatus, required String coinName, required bool withDrawEarning, required String coinSymbol}) {
+  factory Transaction({String? id, required String username, required String transactionId, required double percentage, required int daysToHold, required double amount, required String timeStamp, required bool approve, required String withdrawTimeLocal, required bool withDrawPrinciple, required bool transactionStatus, required String coinName, required bool withDrawEarning}) {
     return Transaction._internal(
       id: id == null ? UUID.getUUID() : id,
       username: username,
@@ -245,8 +231,7 @@ class Transaction extends Model {
       withDrawPrinciple: withDrawPrinciple,
       transactionStatus: transactionStatus,
       coinName: coinName,
-      withDrawEarning: withDrawEarning,
-      coinSymbol: coinSymbol);
+      withDrawEarning: withDrawEarning);
   }
   
   bool equals(Object other) {
@@ -269,8 +254,7 @@ class Transaction extends Model {
       _withDrawPrinciple == other._withDrawPrinciple &&
       _transactionStatus == other._transactionStatus &&
       _coinName == other._coinName &&
-      _withDrawEarning == other._withDrawEarning &&
-      _coinSymbol == other._coinSymbol;
+      _withDrawEarning == other._withDrawEarning;
   }
   
   @override
@@ -294,7 +278,6 @@ class Transaction extends Model {
     buffer.write("transactionStatus=" + (_transactionStatus != null ? _transactionStatus!.toString() : "null") + ", ");
     buffer.write("coinName=" + "$_coinName" + ", ");
     buffer.write("withDrawEarning=" + (_withDrawEarning != null ? _withDrawEarning!.toString() : "null") + ", ");
-    buffer.write("coinSymbol=" + "$_coinSymbol" + ", ");
     buffer.write("createdAt=" + (_createdAt != null ? _createdAt!.format() : "null") + ", ");
     buffer.write("updatedAt=" + (_updatedAt != null ? _updatedAt!.format() : "null"));
     buffer.write("}");
@@ -302,7 +285,7 @@ class Transaction extends Model {
     return buffer.toString();
   }
   
-  Transaction copyWith({String? id, String? username, String? transactionId, double? percentage, int? daysToHold, double? amount, String? timeStamp, bool? approve, String? withdrawTimeLocal, bool? withDrawPrinciple, bool? transactionStatus, String? coinName, bool? withDrawEarning, String? coinSymbol}) {
+  Transaction copyWith({String? id, String? username, String? transactionId, double? percentage, int? daysToHold, double? amount, String? timeStamp, bool? approve, String? withdrawTimeLocal, bool? withDrawPrinciple, bool? transactionStatus, String? coinName, bool? withDrawEarning}) {
     return Transaction._internal(
       id: id ?? this.id,
       username: username ?? this.username,
@@ -316,8 +299,7 @@ class Transaction extends Model {
       withDrawPrinciple: withDrawPrinciple ?? this.withDrawPrinciple,
       transactionStatus: transactionStatus ?? this.transactionStatus,
       coinName: coinName ?? this.coinName,
-      withDrawEarning: withDrawEarning ?? this.withDrawEarning,
-      coinSymbol: coinSymbol ?? this.coinSymbol);
+      withDrawEarning: withDrawEarning ?? this.withDrawEarning);
   }
   
   Transaction.fromJson(Map<String, dynamic> json)  
@@ -334,12 +316,11 @@ class Transaction extends Model {
       _transactionStatus = json['transactionStatus'],
       _coinName = json['coinName'],
       _withDrawEarning = json['withDrawEarning'],
-      _coinSymbol = json['coinSymbol'],
       _createdAt = json['createdAt'] != null ? TemporalDateTime.fromString(json['createdAt']) : null,
       _updatedAt = json['updatedAt'] != null ? TemporalDateTime.fromString(json['updatedAt']) : null;
   
   Map<String, dynamic> toJson() => {
-    'id': id, 'username': _username, 'transactionId': _transactionId, 'percentage': _percentage, 'daysToHold': _daysToHold, 'amount': _amount, 'timeStamp': _timeStamp, 'approve': _approve, 'withdrawTimeLocal': _withdrawTimeLocal, 'withDrawPrinciple': _withDrawPrinciple, 'transactionStatus': _transactionStatus, 'coinName': _coinName, 'withDrawEarning': _withDrawEarning, 'coinSymbol': _coinSymbol, 'createdAt': _createdAt?.format(), 'updatedAt': _updatedAt?.format()
+    'id': id, 'username': _username, 'transactionId': _transactionId, 'percentage': _percentage, 'daysToHold': _daysToHold, 'amount': _amount, 'timeStamp': _timeStamp, 'approve': _approve, 'withdrawTimeLocal': _withdrawTimeLocal, 'withDrawPrinciple': _withDrawPrinciple, 'transactionStatus': _transactionStatus, 'coinName': _coinName, 'withDrawEarning': _withDrawEarning, 'createdAt': _createdAt?.format(), 'updatedAt': _updatedAt?.format()
   };
 
   static final QueryField ID = QueryField(fieldName: "transaction.id");
@@ -355,7 +336,6 @@ class Transaction extends Model {
   static final QueryField TRANSACTIONSTATUS = QueryField(fieldName: "transactionStatus");
   static final QueryField COINNAME = QueryField(fieldName: "coinName");
   static final QueryField WITHDRAWEARNING = QueryField(fieldName: "withDrawEarning");
-  static final QueryField COINSYMBOL = QueryField(fieldName: "coinSymbol");
   static var schema = Model.defineSchema(define: (ModelSchemaDefinition modelSchemaDefinition) {
     modelSchemaDefinition.name = "Transaction";
     modelSchemaDefinition.pluralName = "Transactions";
@@ -432,12 +412,6 @@ class Transaction extends Model {
       key: Transaction.WITHDRAWEARNING,
       isRequired: true,
       ofType: ModelFieldType(ModelFieldTypeEnum.bool)
-    ));
-    
-    modelSchemaDefinition.addField(ModelFieldDefinition.field(
-      key: Transaction.COINSYMBOL,
-      isRequired: true,
-      ofType: ModelFieldType(ModelFieldTypeEnum.string)
     ));
     
     modelSchemaDefinition.addField(ModelFieldDefinition.nonQueryField(

@@ -15,7 +15,6 @@ type Transaction @model {
   transactionStatus: Boolean!
   coinName: String!
   withDrawEarning: Boolean!
-  coinSymbol: String!
 }
 type Withdraw @model{
   username: String!

@@ -28,7 +28,7 @@ export 'Withdraw.dart';
 
 class ModelProvider implements ModelProviderInterface {
   @override
-  String version = "90f79a9f981f5e1529c9e5b0cd80d23e";
+  String version = "079effb3981076dd161e44d91a51a3a0";
   @override
   List<ModelSchema> modelSchemas = [Transaction.schema, Withdraw.schema];
   static final ModelProvider _instance = ModelProvider();
