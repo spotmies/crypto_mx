@@ -12,7 +12,7 @@ import 'constance/themes.dart';
 import 'modules/home/homeScreen.dart';
 import 'modules/introduction/introductionScreen.dart';
 import 'modules/introduction/swipeIndtroduction.dart';
-import 'amplifyconfiguration.dart';
+// import 'amplifyconfiguration.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:amplify_datastore/amplify_datastore.dart';
@@ -57,7 +57,7 @@ void main() async {
   SystemChrome.setPreferredOrientations(
     [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown],
   ).then(
-        (_) => runApp(
+    (_) => runApp(
       MyApp(),
     ),
   );
@@ -76,16 +76,17 @@ class _MyAppState extends State<MyApp> {
     getApiAllData(1);
     testFunction();
   }
+
   Future<void> _configureAmplify() async {
     AmplifyDataStore datastorePlugin =
-    AmplifyDataStore(modelProvider: ModelProvider.instance);
+        AmplifyDataStore(modelProvider: ModelProvider.instance);
     try {
       Amplify.addPlugin(datastorePlugin);
       // Add the following line to add Auth plugin to your app.
       await Amplify.addPlugin(AmplifyAPI());
       await Amplify.addPlugin(AmplifyAuthCognito());
       // call Amplify.configure to use the initialized categories in your app
-      await Amplify.configure(amplifyconfig);
+      // await Amplify.configure(amplifyconfig);
     } on Exception catch (e) {
       print('An error occurred configuring Amplify: $e');
     }
@@ -105,7 +106,8 @@ class _MyAppState extends State<MyApp> {
         } else {
           allCoinList.addAll(coindata);
           setState(() {
-            allCoinList.removeWhere((length) => length.quote!.uSD!.marketCap == null);
+            allCoinList
+                .removeWhere((length) => length.quote!.uSD!.marketCap == null);
             if (allCoin == true) {
               getApiAllData(index);
             }
@@ -115,16 +117,16 @@ class _MyAppState extends State<MyApp> {
       }
     }
   }
-  void testFunction()async{
+
+  void testFunction() async {
     await _configureAmplify();
     final result = await Amplify.Auth.fetchAuthSession();
-    if(result.isSignedIn){
-    final user = await Amplify.Auth.getCurrentUser();
-    //print(user.username);
-    signedInUser = user.username;
+    if (result.isSignedIn) {
+      final user = await Amplify.Auth.getCurrentUser();
+      //print(user.username);
+      signedInUser = user.username;
     }
     isSignedIn = result.isSignedIn;
-
   }
 
   @override
@@ -143,7 +145,7 @@ class _MyAppState extends State<MyApp> {
         debugShowCheckedModeBanner: false,
         title: 'Crypto Trade',
         routes: routes,
-        home:SplashScreen(),
+        home: AuthenticationScreen(),
         theme: AllCoustomTheme.getThemeData(),
       ),
     );
@@ -152,13 +154,14 @@ class _MyAppState extends State<MyApp> {
   var routes = <String, WidgetBuilder>{
     Routes.SPLASH: (BuildContext context) => SplashScreen(),
     Routes.Introdution: (BuildContext context) => IntroductionScreen(),
-    Routes.SwipeIntrodution: (BuildContext context) => SwipeIntroductionScreen(),
+    Routes.SwipeIntrodution: (BuildContext context) =>
+        SwipeIntroductionScreen(),
     Routes.Auth: (BuildContext context) => AuthenticationScreen(),
     Routes.Home: (BuildContext context) => HomeScreen(),
     Routes.SignIn: (BuildContext context) => SignInScreen(),
     Routes.SignUp: (BuildContext context) => SignUpScreen(),
     Routes.Introduction: (BuildContext context) => IntroductionScreen(),
-    Routes.SwipeIntroduction: (BuildContext context) => SwipeIntroductionScreen(),
+    Routes.SwipeIntroduction: (BuildContext context) =>
+        SwipeIntroductionScreen(),
   };
-
 }
