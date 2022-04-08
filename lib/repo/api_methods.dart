@@ -19,6 +19,20 @@ class Server {
           'API Not Responding in Time', uri.toString());
     }
   }
+  Future<dynamic> getMethodParems(String api, queryParameters) async {
+    var uri = Uri.https(API.host, api, queryParameters);
+
+    
+    try {
+      dynamic response = await http.get(uri).timeout(Duration(seconds: 30));
+      return processResponse(response);
+    } on SocketException {
+      throw FetchDataException('No Internet Connection', uri.toString());
+    } on TimeoutException {
+      throw APINotRespondingEXception(
+          'API Not Responding in Time', uri.toString());
+    }
+  }
 
   Future<dynamic> postMethodParems(String api, queryParameters,) async {
     var uri = Uri.https(API.host, api, queryParameters);

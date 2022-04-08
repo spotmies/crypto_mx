@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:cryptomarket/constance/global.dart' as globals;
 import 'package:amplify_flutter/amplify_flutter.dart';
+
 class SplashScreen extends StatefulWidget {
   @override
   _SplashScreenState createState() => _SplashScreenState();
@@ -38,7 +39,9 @@ class _SplashScreenState extends State<SplashScreen>
   _loadNextScreen() async {
     await Future.delayed(const Duration(seconds: 5));
     print(globals.isSignedIn);
-    globals.isSignedIn? Navigator.pushReplacementNamed(context, Routes.Home):Navigator.pushReplacementNamed(context, Routes.Auth);
+    globals.isSignedIn
+        ? Navigator.pushReplacementNamed(context, Routes.Home)
+        : Navigator.pushReplacementNamed(context, Routes.Auth);
   }
 
   void dispose() {
@@ -73,7 +76,7 @@ class _SplashScreenState extends State<SplashScreen>
                 Container(
                   width: animation.value,
                   height: animation.value,
-                  child: Image.asset(ConstanceData.appIcon),
+                  child: Image.asset(ConstanceData.appLogo),
                 ),
                 SizedBox(
                   height: 150,

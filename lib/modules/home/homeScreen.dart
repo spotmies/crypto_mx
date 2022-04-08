@@ -18,6 +18,9 @@ import 'package:cryptomarket/modules/news/latestCryptoNews.dart';
 import 'package:cryptomarket/modules/underGroundSlider/cryptoCoinDetailSlider.dart';
 import 'package:cryptomarket/modules/underGroundSlider/notificationSlider.dart';
 import 'package:cryptomarket/modules/userProfile/userProfile.dart';
+import 'package:cryptomarket/repo/api_methods.dart';
+import 'package:cryptomarket/repo/api_urls.dart';
+import 'package:cryptomarket/utils/shared_preferences.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -68,6 +71,7 @@ String _decodeBase64(String str) {
 
   return utf8.decode(base64Url.decode(output));
 }
+
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
@@ -101,10 +105,10 @@ class _HomeScreenState extends State<HomeScreen> {
   String _low = "0";
   String _change = "0";
   String symbol = 'BTC';
-  void getCurrentUser() async{
+  void getCurrentUser() async {
     final authState = await Amplify.Auth.fetchAuthSession(
-        options: CognitoSessionOptions(getAWSCredentials: true))
-    as CognitoAuthSession;
+            options: CognitoSessionOptions(getAWSCredentials: true))
+        as CognitoAuthSession;
     if (authState.isSignedIn) {
       final claims = parseJwt(authState.userPoolTokens!.idToken);
       final email = claims['email'] as String;
@@ -112,25 +116,59 @@ class _HomeScreenState extends State<HomeScreen> {
       print(signedInUser);
     }
   }
+
+  dynamic coinsList;
+
   @override
-  void initState(){
+  void initState() {
     super.initState();
-    getCurrentUser();
+    getCoinsList();
+
+    // getCurrentUser();
   }
+
+  getCoinsList() async {
+    dynamic user = await getUserData();
+    var prm = {
+      "api_secret": "oApF8z0hmu",
+      "user_id": user["user"]["id"].toString(),
+      // "user_id": 1.toString(),
+      "staking_id": "1"
+    };
+    // print("qwertyuiop" + loc.toString());
+    dynamic res = await Server().getMethodParems(API.getAllSteakings, prm);
+    if (res.statusCode == 200) {
+      setState(() {
+        coinsList = jsonDecode(res.body);
+      });
+      print('$coinsList');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     var height = size.height;
     var width = size.width;
+
+    if (coinsList == null) {
+      return Center(
+        child: CircularProgressIndicator(
+          color: Colors.white,
+        ),
+      );
+    }
     return Scaffold(
       backgroundColor: AllCoustomTheme.getThemeData().backgroundColor,
       key: _scaffoldKey,
       drawer: SizedBox(
-        width: MediaQuery.of(context).size.width * 0.75 < 400 ? MediaQuery.of(context).size.width * 0.75 : 350,
+        width: MediaQuery.of(context).size.width * 0.75 < 400
+            ? MediaQuery.of(context).size.width * 0.75
+            : 350,
         child: Drawer(
           elevation: 0,
           child: AppDrawer(
-            selectItemName: 'wallet',
+            selectItemName: 'Wallet',
           ),
         ),
       ),
@@ -139,16 +177,38 @@ class _HomeScreenState extends State<HomeScreen> {
         child: ListView(
           shrinkWrap: true,
           children: <Widget>[
-            SizedBox(height: height*0.1,),
+            Container(
+              alignment: Alignment.centerLeft,
+              padding: EdgeInsets.only(left: width * 0.05),
+              height: height * 0.1,
+              child: Row(
+                children: [
+                  Image.asset(
+                    "assets/logo.png",
+                    width: height * 0.06,
+                  ),
+                  SizedBox(
+                    width: 15,
+                  ),
+                  Text(
+                    'CryptoMx',
+                    style: TextStyle(color: Color(0xff515669), fontSize: 38),
+                  ),
+                ],
+              ),
+            ),
             Padding(
               padding: const EdgeInsets.only(right: 16, left: 16),
               child: Row(
                 children: <Widget>[
                   IconButton(
-                      onPressed: (){
+                      onPressed: () {
                         _scaffoldKey.currentState!.openDrawer();
-                  },
-                      icon: Icon(Icons.sort,color: Color(0xff515669),)),
+                      },
+                      icon: Icon(
+                        Icons.sort,
+                        color: Color(0xff515669),
+                      )),
                   Animator<double>(
                     duration: Duration(milliseconds: 500),
                     curve: Curves.decelerate,
@@ -156,8 +216,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     builder: (_, anim, __) => Transform.scale(
                       scale: anim.value,
                       child: Text(
-                        'Wallet',
-                        style: TextStyle(color: Color(0xff515669), fontSize: 25),
+                        'My Staking',
+                        style:
+                            TextStyle(color: Color(0xff515669), fontSize: 25),
                       ),
                     ),
                   ),
@@ -166,10 +227,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     radius: 25,
                     backgroundColor: Color(0xff1a2030),
                     child: IconButton(
-                      icon: Icon(
-                          Icons.person
-                      ),
-                      onPressed: (){
+                      icon: Icon(Icons.person),
+                      onPressed: () {
                         Navigator.of(context).push(
                           CupertinoPageRoute(
                             builder: (BuildContext context) => UserProfile(),
@@ -181,361 +240,505 @@ class _HomeScreenState extends State<HomeScreen> {
                 ],
               ),
             ),
-            SizedBox(height:20),
+            SizedBox(height: 20),
             SizedBox(
-              height: MediaQuery.of(context).size.height*0.2,
+              height: MediaQuery.of(context).size.height,
               width: MediaQuery.of(context).size.width,
-              child: ListView(
-                scrollDirection: Axis.horizontal,
-                shrinkWrap: true,
-                children: [
-                  SizedBox(width: 10,),
-                  InkWell(
-                    onTap: (){
-                      Navigator.of(context).push(
-                        CupertinoPageRoute(
-                          builder: (BuildContext context) => TransactionInfo(),
-                        ),
-                      );
-                    },
-                    child: Container(
-                      width: MediaQuery.of(context).size.width*0.6,
-                      decoration: BoxDecoration(
-                          color: Color(0xff1a2030),
-                          borderRadius: BorderRadius.all(Radius.circular(40))
-                      ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Container(
-                            width: MediaQuery.of(context).size.width*0.6,
-                            height: 5,
-                            decoration: BoxDecoration(
-                              gradient: LinearGradient(
-                                  begin: Alignment.bottomLeft,
-                                  end: Alignment.topRight,
-                                  colors: [
-                                    Color(0xff16314a),
-                                    Color(0xff6043ba)
-                                  ]
-                              ),
-                            ),
-                          ),
-                          Row(
-                            children: [
-                              SizedBox(width: 10,),
-                              Text("Bitcoin", style: TextStyle(color: Colors.white, fontSize: 25),),
-                            ],
-                          ),
-                          SizedBox(height: 5,),
-                          Row(
-                            children: [
-                              Row(
-                                crossAxisAlignment: CrossAxisAlignment.baseline,
-                                textBaseline: TextBaseline.alphabetic,
-                                children: [
-                                  SizedBox(width: 10,),
-                                  Text("2", style: TextStyle(color: Colors.white, fontSize: 40,fontWeight: FontWeight.w600),),
-                                  Text(".36", style: TextStyle(color: Colors.white, fontSize: 20,fontWeight: FontWeight.w600),),
-                                ],
-                              ),
-                              Spacer(),
-                              Image.network(coinImageURL+"btc"+"@2x.png",width: MediaQuery.of(context).size.width*0.15,)
-                            ],
-                          ),
-                          SizedBox(height: 5,),
-                          Row(
-                            children: [
-                              SizedBox(width: 10,),
-                              Text("22 Days Left",style: TextStyle(
-                                  color: Color(0xff515669),
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w600
-                              ),),
-                            ],
-                          )
-                        ],
-
-                      ),
-                    ),
-                  ),
-                  SizedBox(width: 10,),
-                  Container(
-                    width: MediaQuery.of(context).size.width*0.6,
-                    decoration: BoxDecoration(
-                        color: Color(0xff1a2030),
-                        borderRadius: BorderRadius.all(Radius.circular(40))
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
+              child: ListView.builder(
+                  // scrollDirection: Axis.horizontal,
+                  itemCount: coinsList["data"].length,
+                  shrinkWrap: true,
+                  itemBuilder: (context, index) {
+                    return Row(
                       children: [
-                        Container(
-                          width: MediaQuery.of(context).size.width*0.6,
-                          height: 5,
-                          decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                                begin: Alignment.bottomLeft,
-                                end: Alignment.topRight,
-                                colors: [
-                                  Color(0xff16314a),
-                                  Color(0xff6043ba)
-                                ]
-                            ),
-                          ),
-                        ),
-                        Row(
-                          children: [
-                            SizedBox(width: 10,),
-                            Text("Ethereum", style: TextStyle(color: Colors.white, fontSize: 25),),
-                          ],
-                        ),
-                        SizedBox(height: 5,),
-                        Row(
-                          children: [
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.baseline,
-                              textBaseline: TextBaseline.alphabetic,
+                        InkWell(
+                          onTap: () {
+                            Navigator.of(context).push(
+                              CupertinoPageRoute(
+                                builder: (BuildContext context) =>
+                                    TransactionInfo(
+                                        id: coinsList["data"][index]
+                                            ["staking_id"]),
+                              ),
+                            );
+                          },
+                          child: Container(
+                            width: MediaQuery.of(context).size.width,
+                            decoration: BoxDecoration(
+                                color: Color(0xff1a2030),
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(40))),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
                               children: [
-                                SizedBox(width: 10,),
-                                Text("3", style: TextStyle(color: Colors.white, fontSize: 40,fontWeight: FontWeight.w600),),
-                                Text(".34", style: TextStyle(color: Colors.white, fontSize: 20,fontWeight: FontWeight.w600),),
+                                Container(
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.9,
+                                  height: 5,
+                                  decoration: BoxDecoration(
+                                    gradient: LinearGradient(
+                                        begin: Alignment.bottomLeft,
+                                        end: Alignment.topRight,
+                                        colors: [
+                                          Color(0xff16314a),
+                                          Color(0xff6043ba)
+                                        ]),
+                                  ),
+                                ),
+                                Row(
+                                  children: [
+                                    SizedBox(
+                                      width: 10,
+                                    ),
+                                    Expanded(
+                                      child: Text(
+                                        coinsList["data"][index]["coin_name"]
+                                            .toString(),
+                                        style: TextStyle(
+                                            overflow: TextOverflow.ellipsis,
+                                            color: Colors.white,
+                                            fontSize: 25),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(
+                                  height: 5,
+                                ),
+                                Row(
+                                  children: [
+                                    Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.baseline,
+                                      textBaseline: TextBaseline.alphabetic,
+                                      children: [
+                                        SizedBox(
+                                          width: 10,
+                                        ),
+                                        Text(
+                                          coinsList["data"][index]["amount"]
+                                              .toString(),
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 40,
+                                              fontWeight: FontWeight.w600),
+                                        ),
+                                      ],
+                                    ),
+                                    Spacer(),
+                                    Image.network(
+                                      coinsList["data"][index]["coin_image"],
+                                      width: MediaQuery.of(context).size.width *
+                                          0.15,
+                                    )
+                                  ],
+                                ),
+                                SizedBox(
+                                  height: 5,
+                                ),
+                                Row(
+                                  children: [
+                                    SizedBox(
+                                      width: 10,
+                                    ),
+                                    Text(
+                                      "22 Days Left",
+                                      style: TextStyle(
+                                          color: Color(0xff515669),
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.w600),
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(
+                                  height: 20,
+                                ),
                               ],
                             ),
-                            Spacer(),
-                            Image.network(coinImageURL+"eth"+"@2x.png",width: MediaQuery.of(context).size.width*0.15,)
-                          ],
+                          ),
                         ),
-                        SizedBox(height: 5,),
-                        Row(
-                          children: [
-                            SizedBox(width: 10,),
-                            Text("32 Days Left",style: TextStyle(
-                                color: Color(0xff515669),
-                                fontSize: 20,
-                                fontWeight: FontWeight.w600
-                            ),),
-                          ],
-                        )
                       ],
-
-                    ),
-                  ),
-                ],
-              ),
+                    );
+                  }),
             ),
-            SizedBox(height: 20,),
-            Text("Recent transactions",
+            SizedBox(
+              height: 20,
+            ),
+            Text(
+              "Recent transactions",
               style: TextStyle(
                 fontSize: 30,
                 fontWeight: FontWeight.w600,
                 color: Color(0xff515669),
-
               ),
             ),
-            SizedBox(height: 10,),
+            SizedBox(
+              height: 10,
+            ),
             Container(
-              width: width*0.9,
-              height: MediaQuery.of(context).size.height*0.55,
+              width: width * 0.9,
+              height: MediaQuery.of(context).size.height * 0.55,
               decoration: BoxDecoration(
                   color: Color(0xff1a2030),
-                  borderRadius: BorderRadius.all(Radius.circular(40))
-              ),
+                  borderRadius: BorderRadius.all(Radius.circular(40))),
               child: ListView(
                 shrinkWrap: true,
                 children: [
-                  SizedBox(height: 20,),
+                  SizedBox(
+                    height: 20,
+                  ),
                   InkWell(
                     highlightColor: Colors.transparent,
                     splashColor: Colors.transparent,
-                    onTap: (){},
+                    onTap: () {},
                     child: Container(
                       child: Row(
                         children: [
-                          SizedBox(width: 10,),
-                          Image.network(coinImageURL+"eth"+"@2x.png",width: MediaQuery.of(context).size.width*0.1,),
-                          SizedBox(width: 20,),
-                          Text("Ethereum", style: TextStyle(color: Color(0xff515669), fontSize: 25),),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Image.network(
+                            coinImageURL + "eth" + "@2x.png",
+                            width: MediaQuery.of(context).size.width * 0.1,
+                          ),
+                          SizedBox(
+                            width: 20,
+                          ),
+                          Text(
+                            "Ethereum",
+                            style: TextStyle(
+                                color: Color(0xff515669), fontSize: 25),
+                          ),
                           Spacer(),
-                          Text("-0.3", style: TextStyle(color: Color(0xff515669), fontSize: 25),),
-                          SizedBox(width: 10,)
+                          Text(
+                            "-0.3",
+                            style: TextStyle(
+                                color: Color(0xff515669), fontSize: 25),
+                          ),
+                          SizedBox(
+                            width: 10,
+                          )
                         ],
                       ),
                     ),
                   ),
-                  Divider(height: 10,
+                  Divider(
+                    height: 10,
                     thickness: 3,
                     indent: 70,
                     color: Color(0xff515669),
                   ),
-                  SizedBox(height: 15,),
-                  InkWell(
-                    highlightColor: Colors.transparent,
-                    splashColor: Colors.transparent,
-                    onTap: (){},
-                    child: Container(
-                      child: Row(
-                        children: [
-                          SizedBox(width: 10,),
-                          Image.network(coinImageURL+"eth"+"@2x.png",width: MediaQuery.of(context).size.width*0.1,),
-                          SizedBox(width: 20,),
-                          Text("Ethereum", style: TextStyle(color: Color(0xff515669), fontSize: 25),),
-                          Spacer(),
-                          Text("-0.3", style: TextStyle(color: Color(0xff515669), fontSize: 25),),
-                          SizedBox(width: 10,)
-                        ],
-                      ),
-                    ),
+                  SizedBox(
+                    height: 15,
                   ),
-                  Divider(height: 10,
-                    thickness: 3,
-                    indent: 70,
-                    color: Color(0xff515669),
-                  ),
-                  SizedBox(height: 15,),
-                  InkWell(
-                    highlightColor: Colors.transparent,
-                    splashColor: Colors.transparent,
-                    onTap: (){},
-                    child: Container(
-                      child: Row(
-                        children: [
-                          SizedBox(width: 10,),
-                          Image.network(coinImageURL+"eth"+"@2x.png",width: MediaQuery.of(context).size.width*0.1,),
-                          SizedBox(width: 20,),
-                          Text("Ethereum", style: TextStyle(color: Color(0xff515669), fontSize: 25),),
-                          Spacer(),
-                          Text("-0.3", style: TextStyle(color: Color(0xff515669), fontSize: 25),),
-                          SizedBox(width: 10,)
-                        ],
-                      ),
-                    ),
-                  ),
-                  Divider(height: 10,
-                    thickness: 3,
-                    indent: 70,
-                    color: Color(0xff515669),
-                  ),
-                  SizedBox(height: 15,),
-                  InkWell(
-                    highlightColor: Colors.transparent,
-                    splashColor: Colors.transparent,
-                    onTap: (){},
-                    child: Container(
-                      child: Row(
-                        children: [
-                          SizedBox(width: 10,),
-                          Image.network(coinImageURL+"eth"+"@2x.png",width: MediaQuery.of(context).size.width*0.1,),
-                          SizedBox(width: 20,),
-                          Text("Ethereum", style: TextStyle(color: Color(0xff515669), fontSize: 25),),
-                          Spacer(),
-                          Text("-0.3", style: TextStyle(color: Color(0xff515669), fontSize: 25),),
-                          SizedBox(width: 10,)
-                        ],
-                      ),
-                    ),
-                  ),
-                  Divider(height: 10,
-                    thickness: 3,
-                    indent: 70,
-                    color: Color(0xff515669),
-                  ),
-                  SizedBox(height: 15,),
-                  InkWell(
-                    highlightColor: Colors.transparent,
-                    splashColor: Colors.transparent,
-                    onTap: (){},
-                    child: Container(
-                      child: Row(
-                        children: [
-                          SizedBox(width: 10,),
-                          Image.network(coinImageURL+"eth"+"@2x.png",width: MediaQuery.of(context).size.width*0.1,),
-                          SizedBox(width: 20,),
-                          Text("Ethereum", style: TextStyle(color: Color(0xff515669), fontSize: 25),),
-                          Spacer(),
-                          Text("-0.3", style: TextStyle(color: Color(0xff515669), fontSize: 25),),
-                          SizedBox(width: 10,)
-                        ],
-                      ),
-                    ),
-                  ),
-                  Divider(height: 10,
-                    thickness: 3,
-                    indent: 70,
-                    color: Color(0xff515669),
-                  ),
-                  SizedBox(height: 15,),
-                  InkWell(
-                    highlightColor: Colors.transparent,
-                    splashColor: Colors.transparent,
-                    onTap: (){},
-                    child: Container(
-                      child: Row(
-                        children: [
-                          SizedBox(width: 10,),
-                          Image.network(coinImageURL+"eth"+"@2x.png",width: MediaQuery.of(context).size.width*0.1,),
-                          SizedBox(width: 20,),
-                          Text("Ethereum", style: TextStyle(color: Color(0xff515669), fontSize: 25),),
-                          Spacer(),
-                          Text("-0.3", style: TextStyle(color: Color(0xff515669), fontSize: 25),),
-                          SizedBox(width: 10,)
-                        ],
-                      ),
-                    ),
-                  ),
-                  Divider(height: 10,
-                    thickness: 3,
-                    indent: 70,
-                    color: Color(0xff515669),
-                  ),
-                  SizedBox(height: 15,),
-                  InkWell(
-                    highlightColor: Colors.transparent,
-                    splashColor: Colors.transparent,
-                    onTap: (){},
-                    child: Container(
-                      child: Row(
-                        children: [
-                          SizedBox(width: 10,),
-                          Image.network(coinImageURL+"eth"+"@2x.png",width: MediaQuery.of(context).size.width*0.1,),
-                          SizedBox(width: 20,),
-                          Text("Ethereum", style: TextStyle(color: Color(0xff515669), fontSize: 25),),
-                          Spacer(),
-                          Text("-0.3", style: TextStyle(color: Color(0xff515669), fontSize: 25),),
-                          SizedBox(width: 10,)
-                        ],
-                      ),
-                    ),
-                  ),
-                  Divider(height: 10,
-                    thickness: 3,
-                    indent: 70,
-                    color: Color(0xff515669),
-                  ),
-                  SizedBox(height: 15,),
-                  InkWell(
-                    highlightColor: Colors.transparent,
-                    splashColor: Colors.transparent,
-                    onTap: (){},
-                    child: Container(
-                      child: Row(
-                        children: [
-                          SizedBox(width: 10,),
-                          Image.network(coinImageURL+"eth"+"@2x.png",width: MediaQuery.of(context).size.width*0.1,),
-                          SizedBox(width: 20,),
-                          Text("Ethereum", style: TextStyle(color: Color(0xff515669), fontSize: 25),),
-                          Spacer(),
-                          Text("-0.3", style: TextStyle(color: Color(0xff515669), fontSize: 25),),
-                          SizedBox(width: 10,)
-                        ],
-                      ),
-                    ),
-                  ),
-                  Divider(height: 10,
-                    thickness: 3,
-                    indent: 70,
-                    color: Color(0xff515669),
-                  ),
-                  SizedBox(height: 15,),
+                  // InkWell(
+                  //   highlightColor: Colors.transparent,
+                  //   splashColor: Colors.transparent,
+                  //   onTap: () {},
+                  //   child: Container(
+                  //     child: Row(
+                  //       children: [
+                  //         SizedBox(
+                  //           width: 10,
+                  //         ),
+                  //         Image.network(
+                  //           coinImageURL + "eth" + "@2x.png",
+                  //           width: MediaQuery.of(context).size.width * 0.1,
+                  //         ),
+                  //         SizedBox(
+                  //           width: 20,
+                  //         ),
+                  //         Text(
+                  //           "Ethereum",
+                  //           style: TextStyle(
+                  //               color: Color(0xff515669), fontSize: 25),
+                  //         ),
+                  //         Spacer(),
+                  //         Text(
+                  //           "-0.3",
+                  //           style: TextStyle(
+                  //               color: Color(0xff515669), fontSize: 25),
+                  //         ),
+                  //         SizedBox(
+                  //           width: 10,
+                  //         )
+                  //       ],
+                  //     ),
+                  //   ),
+                  // ),
+                  // Divider(
+                  //   height: 10,
+                  //   thickness: 3,
+                  //   indent: 70,
+                  //   color: Color(0xff515669),
+                  // ),
+                  // SizedBox(
+                  //   height: 15,
+                  // ),
+                  // InkWell(
+                  //   highlightColor: Colors.transparent,
+                  //   splashColor: Colors.transparent,
+                  //   onTap: () {},
+                  //   child: Container(
+                  //     child: Row(
+                  //       children: [
+                  //         SizedBox(
+                  //           width: 10,
+                  //         ),
+                  //         Image.network(
+                  //           coinImageURL + "eth" + "@2x.png",
+                  //           width: MediaQuery.of(context).size.width * 0.1,
+                  //         ),
+                  //         SizedBox(
+                  //           width: 20,
+                  //         ),
+                  //         Text(
+                  //           "Ethereum",
+                  //           style: TextStyle(
+                  //               color: Color(0xff515669), fontSize: 25),
+                  //         ),
+                  //         Spacer(),
+                  //         Text(
+                  //           "-0.3",
+                  //           style: TextStyle(
+                  //               color: Color(0xff515669), fontSize: 25),
+                  //         ),
+                  //         SizedBox(
+                  //           width: 10,
+                  //         )
+                  //       ],
+                  //     ),
+                  //   ),
+                  // ),
+                  // Divider(
+                  //   height: 10,
+                  //   thickness: 3,
+                  //   indent: 70,
+                  //   color: Color(0xff515669),
+                  // ),
+                  // SizedBox(
+                  //   height: 15,
+                  // ),
+                  // InkWell(
+                  //   highlightColor: Colors.transparent,
+                  //   splashColor: Colors.transparent,
+                  //   onTap: () {},
+                  //   child: Container(
+                  //     child: Row(
+                  //       children: [
+                  //         SizedBox(
+                  //           width: 10,
+                  //         ),
+                  //         Image.network(
+                  //           coinImageURL + "eth" + "@2x.png",
+                  //           width: MediaQuery.of(context).size.width * 0.1,
+                  //         ),
+                  //         SizedBox(
+                  //           width: 20,
+                  //         ),
+                  //         Text(
+                  //           "Ethereum",
+                  //           style: TextStyle(
+                  //               color: Color(0xff515669), fontSize: 25),
+                  //         ),
+                  //         Spacer(),
+                  //         Text(
+                  //           "-0.3",
+                  //           style: TextStyle(
+                  //               color: Color(0xff515669), fontSize: 25),
+                  //         ),
+                  //         SizedBox(
+                  //           width: 10,
+                  //         )
+                  //       ],
+                  //     ),
+                  //   ),
+                  // ),
+                  // Divider(
+                  //   height: 10,
+                  //   thickness: 3,
+                  //   indent: 70,
+                  //   color: Color(0xff515669),
+                  // ),
+                  // SizedBox(
+                  //   height: 15,
+                  // ),
+                  // InkWell(
+                  //   highlightColor: Colors.transparent,
+                  //   splashColor: Colors.transparent,
+                  //   onTap: () {},
+                  //   child: Container(
+                  //     child: Row(
+                  //       children: [
+                  //         SizedBox(
+                  //           width: 10,
+                  //         ),
+                  //         Image.network(
+                  //           coinImageURL + "eth" + "@2x.png",
+                  //           width: MediaQuery.of(context).size.width * 0.1,
+                  //         ),
+                  //         SizedBox(
+                  //           width: 20,
+                  //         ),
+                  //         Text(
+                  //           "Ethereum",
+                  //           style: TextStyle(
+                  //               color: Color(0xff515669), fontSize: 25),
+                  //         ),
+                  //         Spacer(),
+                  //         Text(
+                  //           "-0.3",
+                  //           style: TextStyle(
+                  //               color: Color(0xff515669), fontSize: 25),
+                  //         ),
+                  //         SizedBox(
+                  //           width: 10,
+                  //         )
+                  //       ],
+                  //     ),
+                  //   ),
+                  // ),
+                  // Divider(
+                  //   height: 10,
+                  //   thickness: 3,
+                  //   indent: 70,
+                  //   color: Color(0xff515669),
+                  // ),
+                  // SizedBox(
+                  //   height: 15,
+                  // ),
+                  // InkWell(
+                  //   highlightColor: Colors.transparent,
+                  //   splashColor: Colors.transparent,
+                  //   onTap: () {},
+                  //   child: Container(
+                  //     child: Row(
+                  //       children: [
+                  //         SizedBox(
+                  //           width: 10,
+                  //         ),
+                  //         Image.network(
+                  //           coinImageURL + "eth" + "@2x.png",
+                  //           width: MediaQuery.of(context).size.width * 0.1,
+                  //         ),
+                  //         SizedBox(
+                  //           width: 20,
+                  //         ),
+                  //         Text(
+                  //           "Ethereum",
+                  //           style: TextStyle(
+                  //               color: Color(0xff515669), fontSize: 25),
+                  //         ),
+                  //         Spacer(),
+                  //         Text(
+                  //           "-0.3",
+                  //           style: TextStyle(
+                  //               color: Color(0xff515669), fontSize: 25),
+                  //         ),
+                  //         SizedBox(
+                  //           width: 10,
+                  //         )
+                  //       ],
+                  //     ),
+                  //   ),
+                  // ),
+                  // Divider(
+                  //   height: 10,
+                  //   thickness: 3,
+                  //   indent: 70,
+                  //   color: Color(0xff515669),
+                  // ),
+                  // SizedBox(
+                  //   height: 15,
+                  // ),
+                  // InkWell(
+                  //   highlightColor: Colors.transparent,
+                  //   splashColor: Colors.transparent,
+                  //   onTap: () {},
+                  //   child: Container(
+                  //     child: Row(
+                  //       children: [
+                  //         SizedBox(
+                  //           width: 10,
+                  //         ),
+                  //         Image.network(
+                  //           coinImageURL + "eth" + "@2x.png",
+                  //           width: MediaQuery.of(context).size.width * 0.1,
+                  //         ),
+                  //         SizedBox(
+                  //           width: 20,
+                  //         ),
+                  //         Text(
+                  //           "Ethereum",
+                  //           style: TextStyle(
+                  //               color: Color(0xff515669), fontSize: 25),
+                  //         ),
+                  //         Spacer(),
+                  //         Text(
+                  //           "-0.3",
+                  //           style: TextStyle(
+                  //               color: Color(0xff515669), fontSize: 25),
+                  //         ),
+                  //         SizedBox(
+                  //           width: 10,
+                  //         )
+                  //       ],
+                  //     ),
+                  //   ),
+                  // ),
+                  // Divider(
+                  //   height: 10,
+                  //   thickness: 3,
+                  //   indent: 70,
+                  //   color: Color(0xff515669),
+                  // ),
+                  // SizedBox(
+                  //   height: 15,
+                  // ),
+                  // InkWell(
+                  //   highlightColor: Colors.transparent,
+                  //   splashColor: Colors.transparent,
+                  //   onTap: () {},
+                  //   child: Container(
+                  //     child: Row(
+                  //       children: [
+                  //         SizedBox(
+                  //           width: 10,
+                  //         ),
+                  //         Image.network(
+                  //           coinImageURL + "eth" + "@2x.png",
+                  //           width: MediaQuery.of(context).size.width * 0.1,
+                  //         ),
+                  //         SizedBox(
+                  //           width: 20,
+                  //         ),
+                  //         Text(
+                  //           "Ethereum",
+                  //           style: TextStyle(
+                  //               color: Color(0xff515669), fontSize: 25),
+                  //         ),
+                  //         Spacer(),
+                  //         Text(
+                  //           "-0.3",
+                  //           style: TextStyle(
+                  //               color: Color(0xff515669), fontSize: 25),
+                  //         ),
+                  //         SizedBox(
+                  //           width: 10,
+                  //         )
+                  //       ],
+                  //     ),
+                  //   ),
+                  // ),
+                  // Divider(
+                  //   height: 10,
+                  //   thickness: 3,
+                  //   indent: 70,
+                  //   color: Color(0xff515669),
+                  // ),
+                  // SizedBox(
+                  //   height: 15,
+                  // ),
                 ],
               ),
             ),
@@ -545,4 +748,3 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 }
-

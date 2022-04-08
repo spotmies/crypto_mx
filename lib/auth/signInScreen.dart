@@ -8,6 +8,7 @@ import 'package:cryptomarket/constance/routes.dart';
 import 'package:cryptomarket/constance/themes.dart';
 import 'package:cryptomarket/repo/api_methods.dart';
 import 'package:cryptomarket/repo/api_urls.dart';
+import 'package:cryptomarket/utils/shared_preferences.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:cryptomarket/constance/global.dart' as globals;
@@ -30,7 +31,7 @@ class _SignInScreenState extends State<SignInScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("SignUp"),
+        title: Text("SignIn"),
       ),
       body: Form(
           key: loginFormKey,
@@ -44,8 +45,8 @@ class _SignInScreenState extends State<SignInScreen> {
                       controller: email,
                       keyboardType: TextInputType.emailAddress,
                       validator: (value) =>
-                          value!.isEmpty ? 'name cannot be blank' : null,
-                      decoration: InputDecoration(hintText: "Name")),
+                          value!.isEmpty ? 'Email cannot be blank' : null,
+                      decoration: InputDecoration(hintText: "Email")),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
@@ -53,8 +54,8 @@ class _SignInScreenState extends State<SignInScreen> {
                       controller: password,
                       keyboardType: TextInputType.emailAddress,
                       validator: (value) =>
-                          value!.isEmpty ? 'Email cannot be blank' : null,
-                      decoration: InputDecoration(hintText: "Email")),
+                          value!.isEmpty ? 'Password cannot be blank' : null,
+                      decoration: InputDecoration(hintText: "Password")),
                 ),
                 SizedBox(
                   height: 100,
@@ -72,8 +73,9 @@ class _SignInScreenState extends State<SignInScreen> {
                             await Server().postMethodParems(API.userLogin, prm);
                         if (response.statusCode == 200) {
                           dynamic user = jsonDecode(response.body);
-                          log(user["response"].toString());
+
                           if (user["response"] == "success") {
+                            await setUserData(user);
                             Navigator.pushNamedAndRemoveUntil(
                                     context, Routes.Home, (route) => false)
                                 .then((onValue) {});

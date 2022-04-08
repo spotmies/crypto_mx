@@ -74,7 +74,7 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     getApiAllData(1);
-    testFunction();
+    // testFunction();
   }
 
   Future<void> _configureAmplify() async {
@@ -145,7 +145,7 @@ class _MyAppState extends State<MyApp> {
         debugShowCheckedModeBanner: false,
         title: 'Crypto Trade',
         routes: routes,
-        home: AuthenticationScreen(),
+        home: SplashScreen(),
         theme: AllCoustomTheme.getThemeData(),
       ),
     );

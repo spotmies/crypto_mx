@@ -6,6 +6,7 @@ import 'package:cryptomarket/constance/global.dart';
 import 'package:cryptomarket/constance/themes.dart';
 import 'package:cryptomarket/modules/deposite/depositeCurrency.dart';
 import 'package:cryptomarket/modules/home/homeScreen.dart';
+import 'package:cryptomarket/modules/home/newStaking.dart';
 import 'package:cryptomarket/modules/home/staking.dart';
 import 'package:cryptomarket/modules/muitisig/multisig.dart';
 import 'package:cryptomarket/modules/myWallet/wallet.dart';
@@ -82,7 +83,8 @@ class _AppDrawerState extends State<AppDrawer> {
                   height: 1.2,
                   width: double.infinity,
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.only(bottomLeft: Radius.circular(2)),
+                    borderRadius:
+                        BorderRadius.only(bottomLeft: Radius.circular(2)),
                     gradient: LinearGradient(
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
@@ -132,7 +134,8 @@ class _AppDrawerState extends State<AppDrawer> {
                                   axisAlignment: 1,
                                   child: Icon(
                                     Icons.account_balance_wallet,
-                                    color: AllCoustomTheme.getsecoundTextThemeColor(),
+                                    color: AllCoustomTheme
+                                        .getsecoundTextThemeColor(),
                                     size: 20,
                                   ),
                                 ),
@@ -151,7 +154,8 @@ class _AppDrawerState extends State<AppDrawer> {
                                   child: Text(
                                     'Wallet',
                                     style: TextStyle(
-                                      color: AllCoustomTheme.getTextThemeColors(),
+                                      color:
+                                          AllCoustomTheme.getTextThemeColors(),
                                     ),
                                   ),
                                 ),
@@ -161,20 +165,22 @@ class _AppDrawerState extends State<AppDrawer> {
                               ),
                               widget.selectItemName == 'wallet'
                                   ? Padding(
-                                padding: const EdgeInsets.only(right: 14),
-                                child: Animator<double>(
-                                  duration: Duration(milliseconds: 500),
-                                  curve: Curves.decelerate,
-                                  cycles: 1,
-                                  builder: (_, anim, __) => Transform.scale(
-                                    scale: anim.value,
-                                    child: CircleAvatar(
-                                      backgroundColor: globals.buttoncolor2,
-                                      radius: 5,
-                                    ),
-                                  ),
-                                ),
-                              )
+                                      padding: const EdgeInsets.only(right: 14),
+                                      child: Animator<double>(
+                                        duration: Duration(milliseconds: 500),
+                                        curve: Curves.decelerate,
+                                        cycles: 1,
+                                        builder: (_, anim, __) =>
+                                            Transform.scale(
+                                          scale: anim.value,
+                                          child: CircleAvatar(
+                                            backgroundColor:
+                                                globals.buttoncolor2,
+                                            radius: 5,
+                                          ),
+                                        ),
+                                      ),
+                                    )
                                   : SizedBox(),
                             ],
                           ),
@@ -182,7 +188,6 @@ class _AppDrawerState extends State<AppDrawer> {
                         SizedBox(
                           height: 20,
                         ),
-
                         InkWell(
                           highlightColor: Colors.transparent,
                           splashColor: Colors.transparent,
@@ -190,7 +195,7 @@ class _AppDrawerState extends State<AppDrawer> {
                             Navigator.pop(context);
                             Navigator.of(context).push(
                               CupertinoPageRoute<void>(
-                                builder: (BuildContext context) => StakeScreen(),
+                                builder: (BuildContext context) => NewStaking(),
                               ),
                             );
                           },
@@ -206,7 +211,8 @@ class _AppDrawerState extends State<AppDrawer> {
                                   axisAlignment: 1,
                                   child: Icon(
                                     Icons.markunread_mailbox,
-                                    color: AllCoustomTheme.getsecoundTextThemeColor(),
+                                    color: AllCoustomTheme
+                                        .getsecoundTextThemeColor(),
                                     size: 20,
                                   ),
                                 ),
@@ -225,7 +231,8 @@ class _AppDrawerState extends State<AppDrawer> {
                                   child: Text(
                                     'Live Staking',
                                     style: TextStyle(
-                                      color: AllCoustomTheme.getTextThemeColors(),
+                                      color:
+                                          AllCoustomTheme.getTextThemeColors(),
                                     ),
                                   ),
                                 ),
@@ -235,22 +242,24 @@ class _AppDrawerState extends State<AppDrawer> {
                               ),
                               widget.selectItemName == 'staking'
                                   ? Padding(
-                                padding: const EdgeInsets.only(right: 14),
-                                child: Animator<double>(
-                                  duration: Duration(milliseconds: 500),
-                                  curve: Curves.decelerate,
-                                  cycles: 1,
-                                  builder: (_, anim, __) => SizeTransition(
-                                    sizeFactor: anim.animation,
-                                    axis: Axis.horizontal,
-                                    axisAlignment: 1,
-                                    child: CircleAvatar(
-                                      backgroundColor: globals.buttoncolor2,
-                                      radius: 5,
-                                    ),
-                                  ),
-                                ),
-                              )
+                                      padding: const EdgeInsets.only(right: 14),
+                                      child: Animator<double>(
+                                        duration: Duration(milliseconds: 500),
+                                        curve: Curves.decelerate,
+                                        cycles: 1,
+                                        builder: (_, anim, __) =>
+                                            SizeTransition(
+                                          sizeFactor: anim.animation,
+                                          axis: Axis.horizontal,
+                                          axisAlignment: 1,
+                                          child: CircleAvatar(
+                                            backgroundColor:
+                                                globals.buttoncolor2,
+                                            radius: 5,
+                                          ),
+                                        ),
+                                      ),
+                                    )
                                   : SizedBox(),
                             ],
                           ),
@@ -265,7 +274,8 @@ class _AppDrawerState extends State<AppDrawer> {
                             Navigator.pop(context);
                             Navigator.of(context).push(
                               CupertinoPageRoute<void>(
-                                builder: (BuildContext context) => DepositeCurrency(),
+                                builder: (BuildContext context) =>
+                                    DepositeCurrency(),
                               ),
                             );
                           },
@@ -281,7 +291,8 @@ class _AppDrawerState extends State<AppDrawer> {
                                   axisAlignment: 1,
                                   child: Icon(
                                     Icons.arrow_upward,
-                                    color: AllCoustomTheme.getsecoundTextThemeColor(),
+                                    color: AllCoustomTheme
+                                        .getsecoundTextThemeColor(),
                                     size: 20,
                                   ),
                                 ),
@@ -300,7 +311,8 @@ class _AppDrawerState extends State<AppDrawer> {
                                   child: Text(
                                     'Transaction History',
                                     style: TextStyle(
-                                      color: AllCoustomTheme.getTextThemeColors(),
+                                      color:
+                                          AllCoustomTheme.getTextThemeColors(),
                                     ),
                                   ),
                                 ),
@@ -310,20 +322,22 @@ class _AppDrawerState extends State<AppDrawer> {
                               ),
                               widget.selectItemName == 'history'
                                   ? Padding(
-                                padding: const EdgeInsets.only(right: 14),
-                                child: Animator<double>(
-                                  duration: Duration(milliseconds: 500),
-                                  curve: Curves.decelerate,
-                                  cycles: 1,
-                                  builder: (_, anim, __) => Transform.scale(
-                                    scale: anim.value,
-                                    child: CircleAvatar(
-                                      backgroundColor: globals.buttoncolor2,
-                                      radius: 5,
-                                    ),
-                                  ),
-                                ),
-                              )
+                                      padding: const EdgeInsets.only(right: 14),
+                                      child: Animator<double>(
+                                        duration: Duration(milliseconds: 500),
+                                        curve: Curves.decelerate,
+                                        cycles: 1,
+                                        builder: (_, anim, __) =>
+                                            Transform.scale(
+                                          scale: anim.value,
+                                          child: CircleAvatar(
+                                            backgroundColor:
+                                                globals.buttoncolor2,
+                                            radius: 5,
+                                          ),
+                                        ),
+                                      ),
+                                    )
                                   : SizedBox(),
                             ],
                           ),
@@ -332,7 +346,7 @@ class _AppDrawerState extends State<AppDrawer> {
                           height: 20,
                         ),
                         InkWell(
-                          onTap: (){
+                          onTap: () {
                             Navigator.of(context).push(
                               CupertinoPageRoute(
                                 builder: (BuildContext context) => Settings(),
@@ -349,7 +363,8 @@ class _AppDrawerState extends State<AppDrawer> {
                                   angle: anim.value,
                                   child: Icon(
                                     Icons.settings,
-                                    color: AllCoustomTheme.getsecoundTextThemeColor(),
+                                    color: AllCoustomTheme
+                                        .getsecoundTextThemeColor(),
                                     size: 20,
                                   ),
                                 ),
@@ -373,7 +388,7 @@ class _AppDrawerState extends State<AppDrawer> {
                           height: 20,
                         ),
                         InkWell(
-                          onTap: (){
+                          onTap: () {
                             Navigator.of(context).push(
                               CupertinoPageRoute(
                                 builder: (BuildContext context) => CryptoNews(),
@@ -390,7 +405,8 @@ class _AppDrawerState extends State<AppDrawer> {
                                   angle: anim.value,
                                   child: Icon(
                                     Icons.newspaper,
-                                    color: AllCoustomTheme.getsecoundTextThemeColor(),
+                                    color: AllCoustomTheme
+                                        .getsecoundTextThemeColor(),
                                     size: 20,
                                   ),
                                 ),
