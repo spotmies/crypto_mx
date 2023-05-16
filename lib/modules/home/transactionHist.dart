@@ -3,12 +3,12 @@ import 'dart:convert';
 import 'package:cryptomarket/constance/themes.dart';
 import 'package:cryptomarket/repo/api_methods.dart';
 import 'package:cryptomarket/repo/api_urls.dart';
-import 'package:cryptomarket/utils/shared_preferences.dart';
 import 'package:flutter/material.dart';
 
 class History extends StatefulWidget {
   final dynamic id;
-  const History({Key? key, this.id}) : super(key: key);
+  final dynamic depo;
+  const History({Key? key, this.id, this.depo}) : super(key: key);
 
   @override
   State<History> createState() => _HistoryState();
@@ -25,13 +25,13 @@ class _HistoryState extends State<History> {
 
   dynamic withdraw;
   getCoinsDetails() async {
-    var user = await getUserData();
+    // var user = await getUserData();
     var prm = {
       "api_secret": "oApF8z0hmu",
-      "user_id": user["user"]["id"],
-      // "user_id": 1.toString(),
-      "staking_id": widget.id
-      // "staking_id": 1.toString()
+      // "user_id": user["user"]["id"],
+      "user_id": 1.toString(),
+      // "staking_id": widget.id
+      "staking_id": 1.toString()
     };
     dynamic res = await Server().getMethodParems(API.withdrawList, prm);
     if (res.statusCode == 200) {
@@ -44,6 +44,9 @@ class _HistoryState extends State<History> {
 
   @override
   Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
+    // var height = size.height;
+    var width = size.width;
     if (withdraw == null) {
       return Scaffold(
         backgroundColor: AllCoustomTheme.getThemeData().backgroundColor,
@@ -87,17 +90,41 @@ class _HistoryState extends State<History> {
                         SizedBox(
                           width: 20,
                         ),
-                        Text(
-                          withdraw["data"][index]["coin_name"],
-                          style:
-                              TextStyle(color: Color(0xff515669), fontSize: 25),
+                        Column(
+                          children: [
+                            Text(
+                              withdraw["data"][index]["coin_name"],
+                              style: TextStyle(
+                                  color: Color(0xff515669),
+                                  fontSize: width * 0.07),
+                            ),
+                            Text(
+                              withdraw["data"][index]["created_at"],
+                              style: TextStyle(
+                                  color: Color(0xff515669),
+                                  fontSize: width * 0.022),
+                            ),
+                          ],
                         ),
                         Spacer(),
-                        Text(
-                          withdraw["data"][index]["amount"].toString() +
-                              withdraw["data"][index]["coin_ticker"].toString(),
-                          style:
-                              TextStyle(color: Color(0xff515669), fontSize: 25),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Text(
+                              withdraw["data"][index]["amount"].toString() +
+                                  withdraw["data"][index]["coin_ticker"]
+                                      .toString(),
+                              style: TextStyle(
+                                  color: Color(0xff515669),
+                                  fontSize: width * 0.07),
+                            ),
+                            Text(
+                              "Deposit amount:" + widget.depo.toString(),
+                              style: TextStyle(
+                                  color: Color(0xff515669),
+                                  fontSize: width * 0.022),
+                            ),
+                          ],
                         ),
                         SizedBox(
                           width: 10,

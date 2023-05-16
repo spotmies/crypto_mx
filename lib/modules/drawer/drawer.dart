@@ -1,17 +1,12 @@
 import 'dart:math';
 
 import 'package:animator/animator.dart';
-import 'package:cryptomarket/constance/constance.dart';
 import 'package:cryptomarket/constance/global.dart';
 import 'package:cryptomarket/constance/themes.dart';
 import 'package:cryptomarket/modules/deposite/depositeCurrency.dart';
 import 'package:cryptomarket/modules/home/homeScreen.dart';
 import 'package:cryptomarket/modules/home/newStaking.dart';
-import 'package:cryptomarket/modules/home/staking.dart';
-import 'package:cryptomarket/modules/muitisig/multisig.dart';
-import 'package:cryptomarket/modules/myWallet/wallet.dart';
-import 'package:cryptomarket/modules/tradingPair/tradingPair.dart';
-import 'package:cryptomarket/modules/withdraw/withdrawCurrency.dart';
+import 'package:cryptomarket/modules/home/portfolio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:cryptomarket/constance/global.dart' as globals;
@@ -274,8 +269,7 @@ class _AppDrawerState extends State<AppDrawer> {
                             Navigator.pop(context);
                             Navigator.of(context).push(
                               CupertinoPageRoute<void>(
-                                builder: (BuildContext context) =>
-                                    DepositeCurrency(),
+                                builder: (BuildContext context) => Stockz(),
                               ),
                             );
                           },
@@ -309,7 +303,7 @@ class _AppDrawerState extends State<AppDrawer> {
                                   axis: Axis.horizontal,
                                   axisAlignment: 1,
                                   child: Text(
-                                    'Transaction History',
+                                    'Portfolio',
                                     style: TextStyle(
                                       color:
                                           AllCoustomTheme.getTextThemeColors(),
@@ -320,25 +314,25 @@ class _AppDrawerState extends State<AppDrawer> {
                               Expanded(
                                 child: SizedBox(),
                               ),
-                              widget.selectItemName == 'history'
-                                  ? Padding(
-                                      padding: const EdgeInsets.only(right: 14),
-                                      child: Animator<double>(
-                                        duration: Duration(milliseconds: 500),
-                                        curve: Curves.decelerate,
-                                        cycles: 1,
-                                        builder: (_, anim, __) =>
-                                            Transform.scale(
-                                          scale: anim.value,
-                                          child: CircleAvatar(
-                                            backgroundColor:
-                                                globals.buttoncolor2,
-                                            radius: 5,
-                                          ),
-                                        ),
-                                      ),
-                                    )
-                                  : SizedBox(),
+                              // widget.selectItemName == 'history'
+                              //     ? Padding(
+                              //         padding: const EdgeInsets.only(right: 14),
+                              //         child: Animator<double>(
+                              //           duration: Duration(milliseconds: 500),
+                              //           curve: Curves.decelerate,
+                              //           cycles: 1,
+                              //           builder: (_, anim, __) =>
+                              //               Transform.scale(
+                              //             scale: anim.value,
+                              //             child: CircleAvatar(
+                              //               backgroundColor:
+                              //                   globals.buttoncolor2,
+                              //               radius: 5,
+                              //             ),
+                              //           ),
+                              //         ),
+                              //       )
+                              //     : SizedBox(),
                             ],
                           ),
                         ),

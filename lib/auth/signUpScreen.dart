@@ -1,19 +1,12 @@
+// ignore_for_file: unused_field, unused_element
+
 import 'dart:convert';
 import 'dart:developer';
-
-import 'package:amplify_authenticator/amplify_authenticator.dart';
-import 'package:animator/animator.dart';
-import 'package:cryptomarket/auth/signInScreen.dart';
-import 'package:cryptomarket/constance/constance.dart';
+import 'package:cryptomarket/auth/otpScreen.dart';
 import 'package:cryptomarket/constance/routes.dart';
-import 'package:cryptomarket/constance/themes.dart';
 import 'package:cryptomarket/repo/api_methods.dart';
 import 'package:cryptomarket/repo/api_urls.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:cryptomarket/constance/global.dart' as globals;
-import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
-import '../modules/home/homeScreen.dart';
 
 class SignUpScreen extends StatefulWidget {
   @override
@@ -113,9 +106,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           dynamic user = jsonDecode(response.body);
                           log(user.toString());
                           if (user["response"] == "success") {
-                            Navigator.pushNamedAndRemoveUntil(
-                                    context, Routes.SignIn, (route) => false)
-                                .then((onValue) {});
+                            // await setUserData(user);
+                            Navigator.push(context,
+                                MaterialPageRoute(builder: (context) => OTP(uid:user["user_id"])));
                           }
                         }
                       }

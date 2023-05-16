@@ -1,3 +1,5 @@
+// ignore_for_file: unused_local_variable
+
 import 'package:amplify_datastore/amplify_datastore.dart';
 import 'package:cryptomarket/models/Transaction.dart';
 import 'package:cryptomarket/modules/home/transactionInfo.dart';

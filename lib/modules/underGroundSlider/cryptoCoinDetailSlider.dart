@@ -12,8 +12,6 @@ import 'package:cryptomarket/repo/api_methods.dart';
 import 'package:cryptomarket/repo/api_urls.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:shimmer/shimmer.dart';
-import 'package:cryptomarket/constance/global.dart' as globals;
 import '../home/transaction.dart';
 import '../../constance/routes.dart';
 
@@ -21,6 +19,7 @@ class SliderOpen extends StatefulWidget {
   final String coinSymbol;
   final String coinName;
   final String coinId;
+  final String price;
   // final String percentchange1h;
   // final String marketCap;
   // final String volume;
@@ -31,6 +30,7 @@ class SliderOpen extends StatefulWidget {
     required this.coinSymbol,
     required this.coinName,
     required this.coinId,
+    required this.price,
     // required this.percentchange1h,
     // required this.marketCap,
     // required this.volume,
@@ -103,6 +103,7 @@ class _SliderOpenState extends State<SliderOpen> {
                     height: 4,
                   ),
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                       Animator<double>(
                         duration: Duration(milliseconds: 500),
@@ -130,59 +131,66 @@ class _SliderOpenState extends State<SliderOpen> {
                             ),
                           ),
                         ),
-                      )
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Row(
+                            children: <Widget>[
+                              Animator<double>(
+                                tween: Tween<double>(begin: 0, end: 1),
+                                duration: Duration(milliseconds: 500),
+                                cycles: 1,
+                                builder: (_, anim, __) => SizeTransition(
+                                  sizeFactor: anim.animation,
+                                  axis: Axis.horizontal,
+                                  axisAlignment: 1,
+                                  child: Text(
+                                    widget.coinName,
+                                    style: TextStyle(
+                                      color:
+                                          AllCoustomTheme.getTextThemeColors(),
+                                      fontSize: ConstanceData.SIZE_TITLE25,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 2,
+                          ),
+                          Row(
+                            children: <Widget>[
+                              Animator<double>(
+                                tween: Tween<double>(begin: 0, end: 1),
+                                duration: Duration(milliseconds: 500),
+                                cycles: 1,
+                                builder: (_, anim, __) => SizeTransition(
+                                  sizeFactor: anim.animation,
+                                  axis: Axis.horizontal,
+                                  axisAlignment: 1,
+                                  child: Text(
+                                    '\$' + widget.price,
+                                    // double.parse(widget.price).toStringAsFixed(2),
+                                    style: TextStyle(
+                                      color: Colors.green,
+                                      fontSize: ConstanceData.SIZE_TITLE16,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
                     ],
                   ),
                   SizedBox(
                     height: 10,
                   ),
-                  Row(
-                    children: <Widget>[
-                      Animator<double>(
-                        tween: Tween<double>(begin: 0, end: 1),
-                        duration: Duration(milliseconds: 500),
-                        cycles: 1,
-                        builder: (_, anim, __) => SizeTransition(
-                          sizeFactor: anim.animation,
-                          axis: Axis.horizontal,
-                          axisAlignment: 1,
-                          child: Text(
-                            widget.coinName,
-                            style: TextStyle(
-                              color: AllCoustomTheme.getTextThemeColors(),
-                              fontSize: ConstanceData.SIZE_TITLE25,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 2,
-                  ),
-                  Row(
-                    children: <Widget>[
-                      Animator<double>(
-                        tween: Tween<double>(begin: 0, end: 1),
-                        duration: Duration(milliseconds: 500),
-                        cycles: 1,
-                        builder: (_, anim, __) => SizeTransition(
-                          sizeFactor: anim.animation,
-                          axis: Axis.horizontal,
-                          axisAlignment: 1,
-                          child: Text(
-                            '\$' + "3.254",
-                            // double.parse(widget.price).toStringAsFixed(2),
-                            style: TextStyle(
-                              color: Colors.green,
-                              fontSize: ConstanceData.SIZE_TITLE16,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
+
                   SizedBox(
                     height: 30,
                   ),
@@ -259,338 +267,338 @@ class _SliderOpenState extends State<SliderOpen> {
                           ),
                         ),
                       )),
-                      SizedBox(
-                        width: 120,
-                      ),
-                      Expanded(
-                        child: FlatButton(
-                          padding: EdgeInsets.all(0),
-                          child: new Container(
-                            height: 40.0,
-                            alignment: FractionalOffset.center,
-                            decoration: BoxDecoration(
-                              borderRadius: new BorderRadius.circular(30),
-                              color: Colors.green,
-                            ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                                Animator<Offset>(
-                                  tween: Tween<Offset>(
-                                    begin: Offset(0, -0.2),
-                                    end: Offset(0, 0),
-                                  ),
-                                  duration: Duration(milliseconds: 500),
-                                  cycles: 0,
-                                  builder: (_, anim, __) =>
-                                      FractionalTranslation(
-                                    translation: anim.value,
-                                    child: Padding(
-                                      padding: const EdgeInsets.only(top: 2),
-                                      child:
-                                          // widget.percentchange1h.contains('-')
-                                          //     ? Icon(
-                                          //         Icons.arrow_downward,
-                                          //         color: AllCoustomTheme
-                                          //             .getTextThemeColors(),
-                                          //         size: 18,
-                                          //       )
-                                          //     :
-                                          Icon(
-                                        Icons.arrow_upward,
-                                        color: AllCoustomTheme
-                                            .getTextThemeColors(),
-                                        size: 18,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(
-                                  width: 2,
-                                ),
-                                Text(
-                                  // double.parse(widget.percentchange1h)
-                                  //         .toStringAsFixed(2) +
-                                  //     '%',
-                                  "1.5 %",
-                                  style: TextStyle(
-                                    fontFamily: 'Ubuntu',
-                                    color: AllCoustomTheme.getTextThemeColors(),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          onPressed: () {},
-                        ),
-                      ),
+                      // SizedBox(
+                      //   width: 120,
+                      // ),
+                      // Expanded(
+                      //   child: FlatButton(
+                      //     padding: EdgeInsets.all(0),
+                      //     child: new Container(
+                      //       height: 40.0,
+                      //       alignment: FractionalOffset.center,
+                      //       decoration: BoxDecoration(
+                      //         borderRadius: new BorderRadius.circular(30),
+                      //         color: Colors.green,
+                      //       ),
+                      //       child: Row(
+                      //         mainAxisAlignment: MainAxisAlignment.center,
+                      //         children: <Widget>[
+                      //           Animator<Offset>(
+                      //             tween: Tween<Offset>(
+                      //               begin: Offset(0, -0.2),
+                      //               end: Offset(0, 0),
+                      //             ),
+                      //             duration: Duration(milliseconds: 500),
+                      //             cycles: 0,
+                      //             builder: (_, anim, __) =>
+                      //                 FractionalTranslation(
+                      //               translation: anim.value,
+                      //               child: Padding(
+                      //                 padding: const EdgeInsets.only(top: 2),
+                      //                 child:
+                      //                     // widget.percentchange1h.contains('-')
+                      //                     //     ? Icon(
+                      //                     //         Icons.arrow_downward,
+                      //                     //         color: AllCoustomTheme
+                      //                     //             .getTextThemeColors(),
+                      //                     //         size: 18,
+                      //                     //       )
+                      //                     //     :
+                      //                     Icon(
+                      //                   Icons.arrow_upward,
+                      //                   color: AllCoustomTheme
+                      //                       .getTextThemeColors(),
+                      //                   size: 18,
+                      //                 ),
+                      //               ),
+                      //             ),
+                      //           ),
+                      //           SizedBox(
+                      //             width: 2,
+                      //           ),
+                      //           Text(
+                      //             // double.parse(widget.percentchange1h)
+                      //             //         .toStringAsFixed(2) +
+                      //             //     '%',
+                      //             "1.5 %",
+                      //             style: TextStyle(
+                      //               fontFamily: 'Ubuntu',
+                      //               color: AllCoustomTheme.getTextThemeColors(),
+                      //             ),
+                      //           ),
+                      //         ],
+                      //       ),
+                      //     ),
+                      //     onPressed: () {},
+                      //   ),
+                      // ),
                     ],
                   ),
-                  SizedBox(
-                    height: 30,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Text(
-                        'Today',
-                        style: TextStyle(
-                          fontFamily: 'Ubuntu',
-                          color: AllCoustomTheme.getTextThemeColors(),
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      Text(
-                        '1W',
-                        style: TextStyle(
-                          fontFamily: 'Ubuntu',
-                          color: AllCoustomTheme.getTextThemeColors(),
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      Container(
-                        height: 25.0,
-                        width: 40,
-                        alignment: FractionalOffset.center,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(30),
-                          color: AllCoustomTheme.getsecoundTextThemeColor(),
-                        ),
-                        child: Text(
-                          '1M',
-                          style: TextStyle(
-                            fontFamily: 'Ubuntu',
-                            color: AllCoustomTheme.getTextThemeColors(),
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                      Text(
-                        '2M',
-                        style: TextStyle(
-                          fontFamily: 'Ubuntu',
-                          color: AllCoustomTheme.getTextThemeColors(),
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      Text(
-                        '6M',
-                        style: TextStyle(
-                          fontFamily: 'Ubuntu',
-                          color: AllCoustomTheme.getTextThemeColors(),
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      Text(
-                        '1Y',
-                        style: TextStyle(
-                          fontFamily: 'Ubuntu',
-                          color: AllCoustomTheme.getTextThemeColors(),
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      Text(
-                        'ALL',
-                        style: TextStyle(
-                          fontFamily: 'Ubuntu',
-                          color: AllCoustomTheme.getTextThemeColors(),
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 50,
-                  ),
-                  isLoadingSliderDetail
-                      ? Shimmer.fromColors(
-                          baseColor: globals.buttoncolor1,
-                          highlightColor: globals.buttoncolor2,
-                          enabled: true,
-                          child: Column(
-                            children: [1, 1, 1, 1]
-                                .map(
-                                  (_) => Padding(
-                                    padding: const EdgeInsets.only(
-                                        left: 4, right: 4),
-                                    child: Column(
-                                      children: <Widget>[
-                                        SizedBox(
-                                          height: 5,
-                                        ),
-                                        Row(
-                                          children: [
-                                            Expanded(
-                                              child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Container(
-                                                    width: double.infinity,
-                                                    height: 8.0,
-                                                    color: Colors.white,
-                                                  ),
-                                                  Padding(
-                                                    padding: const EdgeInsets
-                                                            .symmetric(
-                                                        vertical: 2.0),
-                                                  ),
-                                                  Container(
-                                                    width: 40.0,
-                                                    height: 8.0,
-                                                    color: Colors.white,
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        SizedBox(
-                                          height: 20,
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                )
-                                .toList(),
-                          ),
-                        )
-                      : Column(
-                          children: <Widget>[
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: <Widget>[
-                                Text(
-                                  'Market Cap',
-                                  style: TextStyle(
-                                    color: AllCoustomTheme.getTextThemeColors(),
-                                    fontWeight: FontWeight.bold,
-                                    fontFamily: 'Ubuntu',
-                                  ),
-                                ),
-                                Text(
-                                  '\$' + "90",
-                                  // double.parse(widget.marketCap)
-                                  //     .toStringAsFixed(2),
-                                  style: TextStyle(
-                                    fontFamily: 'Ubuntu',
-                                    color: AllCoustomTheme.getTextThemeColors(),
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                )
-                              ],
-                            ),
-                            SizedBox(
-                              height: 8,
-                            ),
-                            Divider(
-                              color: AllCoustomTheme.getTextThemeColors(),
-                            ),
-                            SizedBox(
-                              height: 8,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: <Widget>[
-                                Text(
-                                  'Volume 24hr',
-                                  style: TextStyle(
-                                    fontFamily: 'Ubuntu',
-                                    color: AllCoustomTheme.getTextThemeColors(),
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                Text(
-                                  '\$' + "90",
-                                  // double.parse(widget.volume).toStringAsFixed(2),
-                                  style: TextStyle(
-                                    fontFamily: 'Ubuntu',
-                                    color: AllCoustomTheme.getTextThemeColors(),
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                )
-                              ],
-                            ),
-                            SizedBox(
-                              height: 8,
-                            ),
-                            Divider(
-                              color: AllCoustomTheme.getTextThemeColors(),
-                            ),
-                            SizedBox(
-                              height: 8,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: <Widget>[
-                                Text(
-                                  'Available Supply',
-                                  style: TextStyle(
-                                    fontFamily: 'Ubuntu',
-                                    color: AllCoustomTheme.getTextThemeColors(),
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                Text(
-                                  '\$' + "90",
-                                  // double.parse(widget.availableSupply)
-                                  //     .toStringAsFixed(2),
-                                  style: TextStyle(
-                                    fontFamily: 'Ubuntu',
-                                    color: AllCoustomTheme.getTextThemeColors(),
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                )
-                              ],
-                            ),
-                            SizedBox(
-                              height: 8,
-                            ),
-                            Divider(
-                              color: AllCoustomTheme.getTextThemeColors(),
-                            ),
-                            SizedBox(
-                              height: 8,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: <Widget>[
-                                Text(
-                                  '% Change 24hr',
-                                  style: TextStyle(
-                                    fontFamily: 'Ubuntu',
-                                    color: AllCoustomTheme.getTextThemeColors(),
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                // Text(
-                                //   widget.changein24HR.contains('-')
-                                //       ? '' +
-                                //           double.parse(widget.changein24HR)
-                                //               .toStringAsFixed(2) +
-                                //           '%'
-                                //       : '+' +
-                                //           double.parse(widget.changein24HR)
-                                //               .toStringAsFixed(2) +
-                                //           '%',
-                                //   style: TextStyle(
-                                //     fontFamily: 'Ubuntu',
-                                //     color: widget.changein24HR.contains('-')
-                                //         ? Colors.red
-                                //         : Colors.green,
-                                //     fontWeight: FontWeight.bold,
-                                //   ),
-                                // ),
-                              ],
-                            ),
-                            SizedBox(
-                              height: 8,
-                            ),
-                            Divider(
-                              color: AllCoustomTheme.getsecoundTextThemeColor(),
-                            ),
-                          ],
-                        ),
+                  // SizedBox(
+                  //   height: 30,
+                  // ),
+                  // Row(
+                  //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //   children: <Widget>[
+                  //     Text(
+                  //       'Today',
+                  //       style: TextStyle(
+                  //         fontFamily: 'Ubuntu',
+                  //         color: AllCoustomTheme.getTextThemeColors(),
+                  //         fontWeight: FontWeight.bold,
+                  //       ),
+                  //     ),
+                  //     Text(
+                  //       '1W',
+                  //       style: TextStyle(
+                  //         fontFamily: 'Ubuntu',
+                  //         color: AllCoustomTheme.getTextThemeColors(),
+                  //         fontWeight: FontWeight.bold,
+                  //       ),
+                  //     ),
+                  //     Container(
+                  //       height: 25.0,
+                  //       width: 40,
+                  //       alignment: FractionalOffset.center,
+                  //       decoration: BoxDecoration(
+                  //         borderRadius: BorderRadius.circular(30),
+                  //         color: AllCoustomTheme.getsecoundTextThemeColor(),
+                  //       ),
+                  //       child: Text(
+                  //         '1M',
+                  //         style: TextStyle(
+                  //           fontFamily: 'Ubuntu',
+                  //           color: AllCoustomTheme.getTextThemeColors(),
+                  //           fontWeight: FontWeight.bold,
+                  //         ),
+                  //       ),
+                  //     ),
+                  //     Text(
+                  //       '2M',
+                  //       style: TextStyle(
+                  //         fontFamily: 'Ubuntu',
+                  //         color: AllCoustomTheme.getTextThemeColors(),
+                  //         fontWeight: FontWeight.bold,
+                  //       ),
+                  //     ),
+                  //     Text(
+                  //       '6M',
+                  //       style: TextStyle(
+                  //         fontFamily: 'Ubuntu',
+                  //         color: AllCoustomTheme.getTextThemeColors(),
+                  //         fontWeight: FontWeight.bold,
+                  //       ),
+                  //     ),
+                  //     Text(
+                  //       '1Y',
+                  //       style: TextStyle(
+                  //         fontFamily: 'Ubuntu',
+                  //         color: AllCoustomTheme.getTextThemeColors(),
+                  //         fontWeight: FontWeight.bold,
+                  //       ),
+                  //     ),
+                  //     Text(
+                  //       'ALL',
+                  //       style: TextStyle(
+                  //         fontFamily: 'Ubuntu',
+                  //         color: AllCoustomTheme.getTextThemeColors(),
+                  //         fontWeight: FontWeight.bold,
+                  //       ),
+                  //     ),
+                  //   ],
+                  // ),
+                  // SizedBox(
+                  //   height: 50,
+                  // ),
+                  // isLoadingSliderDetail
+                  //     ? Shimmer.fromColors(
+                  //         baseColor: globals.buttoncolor1,
+                  //         highlightColor: globals.buttoncolor2,
+                  //         enabled: true,
+                  //         child: Column(
+                  //           children: [1, 1, 1, 1]
+                  //               .map(
+                  //                 (_) => Padding(
+                  //                   padding: const EdgeInsets.only(
+                  //                       left: 4, right: 4),
+                  //                   child: Column(
+                  //                     children: <Widget>[
+                  //                       SizedBox(
+                  //                         height: 5,
+                  //                       ),
+                  //                       Row(
+                  //                         children: [
+                  //                           Expanded(
+                  //                             child: Column(
+                  //                               crossAxisAlignment:
+                  //                                   CrossAxisAlignment.start,
+                  //                               children: [
+                  //                                 Container(
+                  //                                   width: double.infinity,
+                  //                                   height: 8.0,
+                  //                                   color: Colors.white,
+                  //                                 ),
+                  //                                 Padding(
+                  //                                   padding: const EdgeInsets
+                  //                                           .symmetric(
+                  //                                       vertical: 2.0),
+                  //                                 ),
+                  //                                 Container(
+                  //                                   width: 40.0,
+                  //                                   height: 8.0,
+                  //                                   color: Colors.white,
+                  //                                 ),
+                  //                               ],
+                  //                             ),
+                  //                           ),
+                  //                         ],
+                  //                       ),
+                  //                       SizedBox(
+                  //                         height: 20,
+                  //                       ),
+                  //                     ],
+                  //                   ),
+                  //                 ),
+                  //               )
+                  //               .toList(),
+                  //         ),
+                  //       )
+                  //     : Column(
+                  //         children: <Widget>[
+                  //           Row(
+                  //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //             children: <Widget>[
+                  //               Text(
+                  //                 'Market Cap',
+                  //                 style: TextStyle(
+                  //                   color: AllCoustomTheme.getTextThemeColors(),
+                  //                   fontWeight: FontWeight.bold,
+                  //                   fontFamily: 'Ubuntu',
+                  //                 ),
+                  //               ),
+                  //               Text(
+                  //                 '\$' + "90",
+                  //                 // double.parse(widget.marketCap)
+                  //                 //     .toStringAsFixed(2),
+                  //                 style: TextStyle(
+                  //                   fontFamily: 'Ubuntu',
+                  //                   color: AllCoustomTheme.getTextThemeColors(),
+                  //                   fontWeight: FontWeight.bold,
+                  //                 ),
+                  //               )
+                  //             ],
+                  //           ),
+                  //           SizedBox(
+                  //             height: 8,
+                  //           ),
+                  //           Divider(
+                  //             color: AllCoustomTheme.getTextThemeColors(),
+                  //           ),
+                  //           SizedBox(
+                  //             height: 8,
+                  //           ),
+                  //           Row(
+                  //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //             children: <Widget>[
+                  //               Text(
+                  //                 'Volume 24hr',
+                  //                 style: TextStyle(
+                  //                   fontFamily: 'Ubuntu',
+                  //                   color: AllCoustomTheme.getTextThemeColors(),
+                  //                   fontWeight: FontWeight.bold,
+                  //                 ),
+                  //               ),
+                  //               Text(
+                  //                 '\$' + "90",
+                  //                 // double.parse(widget.volume).toStringAsFixed(2),
+                  //                 style: TextStyle(
+                  //                   fontFamily: 'Ubuntu',
+                  //                   color: AllCoustomTheme.getTextThemeColors(),
+                  //                   fontWeight: FontWeight.bold,
+                  //                 ),
+                  //               )
+                  //             ],
+                  //           ),
+                  //           SizedBox(
+                  //             height: 8,
+                  //           ),
+                  //           Divider(
+                  //             color: AllCoustomTheme.getTextThemeColors(),
+                  //           ),
+                  //           SizedBox(
+                  //             height: 8,
+                  //           ),
+                  //           Row(
+                  //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //             children: <Widget>[
+                  //               Text(
+                  //                 'Available Supply',
+                  //                 style: TextStyle(
+                  //                   fontFamily: 'Ubuntu',
+                  //                   color: AllCoustomTheme.getTextThemeColors(),
+                  //                   fontWeight: FontWeight.bold,
+                  //                 ),
+                  //               ),
+                  //               Text(
+                  //                 '\$' + "90",
+                  //                 // double.parse(widget.availableSupply)
+                  //                 //     .toStringAsFixed(2),
+                  //                 style: TextStyle(
+                  //                   fontFamily: 'Ubuntu',
+                  //                   color: AllCoustomTheme.getTextThemeColors(),
+                  //                   fontWeight: FontWeight.bold,
+                  //                 ),
+                  //               )
+                  //             ],
+                  //           ),
+                  //           SizedBox(
+                  //             height: 8,
+                  //           ),
+                  //           Divider(
+                  //             color: AllCoustomTheme.getTextThemeColors(),
+                  //           ),
+                  //           SizedBox(
+                  //             height: 8,
+                  //           ),
+                  //           Row(
+                  //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //             children: <Widget>[
+                  //               Text(
+                  //                 '% Change 24hr',
+                  //                 style: TextStyle(
+                  //                   fontFamily: 'Ubuntu',
+                  //                   color: AllCoustomTheme.getTextThemeColors(),
+                  //                   fontWeight: FontWeight.bold,
+                  //                 ),
+                  //               ),
+                  //               // Text(
+                  //               //   widget.changein24HR.contains('-')
+                  //               //       ? '' +
+                  //               //           double.parse(widget.changein24HR)
+                  //               //               .toStringAsFixed(2) +
+                  //               //           '%'
+                  //               //       : '+' +
+                  //               //           double.parse(widget.changein24HR)
+                  //               //               .toStringAsFixed(2) +
+                  //               //           '%',
+                  //               //   style: TextStyle(
+                  //               //     fontFamily: 'Ubuntu',
+                  //               //     color: widget.changein24HR.contains('-')
+                  //               //         ? Colors.red
+                  //               //         : Colors.green,
+                  //               //     fontWeight: FontWeight.bold,
+                  //               //   ),
+                  //               // ),
+                  //             ],
+                  //           ),
+                  //           SizedBox(
+                  //             height: 8,
+                  //           ),
+                  //           Divider(
+                  //             color: AllCoustomTheme.getsecoundTextThemeColor(),
+                  //           ),
+                  //         ],
+                  //       ),
                 ],
               ),
             ),

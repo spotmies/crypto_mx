@@ -1,42 +1,21 @@
+// ignore_for_file: unused_field
+
 import 'dart:convert';
-import 'dart:math';
-import 'package:amplify_datastore/amplify_datastore.dart';
 import 'package:animator/animator.dart';
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:connectivity/connectivity.dart';
-import 'package:cryptomarket/api/apiProvider.dart';
-import 'package:cryptomarket/constance/constance.dart';
 import 'package:cryptomarket/constance/global.dart';
 import 'package:cryptomarket/constance/themes.dart';
-import 'package:cryptomarket/graphDetail/QuickPercentChangeBar.dart';
-import 'package:cryptomarket/main.dart';
 import 'package:cryptomarket/model/listingsModel.dart';
-import 'package:cryptomarket/modules/chagePIN/changePassword.dart';
-import 'package:cryptomarket/modules/chagePIN/changepin.dart';
 import 'package:cryptomarket/modules/drawer/drawer.dart';
-import 'package:cryptomarket/modules/news/latestCryptoNews.dart';
-import 'package:cryptomarket/modules/underGroundSlider/cryptoCoinDetailSlider.dart';
-import 'package:cryptomarket/modules/underGroundSlider/notificationSlider.dart';
 import 'package:cryptomarket/modules/userProfile/userProfile.dart';
 import 'package:cryptomarket/repo/api_methods.dart';
 import 'package:cryptomarket/repo/api_urls.dart';
 import 'package:cryptomarket/utils/shared_preferences.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:cryptomarket/constance/global.dart' as globals;
-import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
-import 'package:shimmer/shimmer.dart';
-import 'dart:async';
-import 'package:candlesticks/candlesticks.dart';
-import 'package:web_socket_channel/web_socket_channel.dart';
+// import 'package:cryptomarket/constance/global.dart' as globals;
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
-import '../../constance/routes.dart';
-import 'transactionHistory.dart';
-import 'package:cryptomarket/models/Transaction.dart';
 import 'transactionInfoDummy.dart';
-import 'dart:convert';
 
 Map<String, dynamic> parseJwt(String token) {
   final parts = token.split('.');
@@ -180,20 +159,21 @@ class _HomeScreenState extends State<HomeScreen> {
             Container(
               alignment: Alignment.centerLeft,
               padding: EdgeInsets.only(left: width * 0.05),
-              height: height * 0.1,
+              height: height * 0.08,
               child: Row(
                 children: [
                   Image.asset(
-                    "assets/logo.png",
-                    width: height * 0.06,
+                    "assets/newLogo.png",
+                    width: height * 0.2,
                   ),
-                  SizedBox(
-                    width: 15,
-                  ),
-                  Text(
-                    'CryptoMx',
-                    style: TextStyle(color: Color(0xff515669), fontSize: 38),
-                  ),
+                  // SizedBox(
+                  //   width: 15,
+                  // ),
+                  // Text(
+                  //   'CryptoMx',
+                  //   style: TextStyle(
+                  //       color: Color(0xff515669), fontSize: width * 0.075),
+                  // ),
                 ],
               ),
             ),
@@ -217,8 +197,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       scale: anim.value,
                       child: Text(
                         'My Staking',
-                        style:
-                            TextStyle(color: Color(0xff515669), fontSize: 25),
+                        style: TextStyle(
+                            color: Color(0xff515669), fontSize: width * 0.06),
                       ),
                     ),
                   ),
@@ -264,6 +244,9 @@ class _HomeScreenState extends State<HomeScreen> {
                           },
                           child: Container(
                             width: MediaQuery.of(context).size.width,
+                            padding:
+                                EdgeInsets.only(left: 5, right: 5, bottom: 5),
+                            margin: EdgeInsets.only(bottom: 10),
                             decoration: BoxDecoration(
                                 color: Color(0xff1a2030),
                                 borderRadius:
@@ -285,19 +268,39 @@ class _HomeScreenState extends State<HomeScreen> {
                                         ]),
                                   ),
                                 ),
+                                SizedBox(
+                                  height: height * 0.005,
+                                ),
                                 Row(
                                   children: [
                                     SizedBox(
                                       width: 10,
                                     ),
                                     Expanded(
-                                      child: Text(
-                                        coinsList["data"][index]["coin_name"]
-                                            .toString(),
-                                        style: TextStyle(
-                                            overflow: TextOverflow.ellipsis,
-                                            color: Colors.white,
-                                            fontSize: 25),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            coinsList["data"][index]
+                                                    ["coin_name"]
+                                                .toString(),
+                                            style: TextStyle(
+                                                overflow: TextOverflow.ellipsis,
+                                                color: Colors.white,
+                                                fontSize: width * 0.055),
+                                          ),
+                                          Text(
+                                            "USD" +
+                                                coinsList["data"][index]
+                                                        ["additional_comments"]
+                                                    .toString(),
+                                            style: TextStyle(
+                                                overflow: TextOverflow.ellipsis,
+                                                color: Colors.grey[600],
+                                                fontSize: width * 0.055),
+                                          ),
+                                        ],
                                       ),
                                     ),
                                   ],
@@ -320,7 +323,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                               .toString(),
                                           style: TextStyle(
                                               color: Colors.white,
-                                              fontSize: 40,
+                                              fontSize: width * 0.08,
                                               fontWeight: FontWeight.w600),
                                         ),
                                       ],
@@ -342,10 +345,11 @@ class _HomeScreenState extends State<HomeScreen> {
                                       width: 10,
                                     ),
                                     Text(
-                                      "22 Days Left",
+                                      coinsList["data"][index]["days_left"]
+                                          .toString(),
                                       style: TextStyle(
                                           color: Color(0xff515669),
-                                          fontSize: 20,
+                                          fontSize: width * 0.05,
                                           fontWeight: FontWeight.w600),
                                     ),
                                   ],

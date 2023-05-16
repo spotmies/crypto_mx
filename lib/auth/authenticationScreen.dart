@@ -1,15 +1,11 @@
 import 'package:animator/animator.dart';
-import 'package:cryptomarket/auth/signInScreen.dart';
 import 'package:cryptomarket/constance/constance.dart';
 import 'package:cryptomarket/constance/themes.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:cryptomarket/constance/global.dart' as globals;
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
-import 'package:simple_gradient_text/simple_gradient_text.dart';
 import '../constance/routes.dart';
-
-import 'selectAuthScreen.dart';
 
 class AuthenticationScreen extends StatefulWidget {
   @override
@@ -40,290 +36,310 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: <Widget>[
-        Container(
-          foregroundDecoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [
-                HexColor(globals.primaryColorString).withOpacity(0.9),
-                HexColor(globals.primaryColorString).withOpacity(0.8),
-                HexColor(globals.primaryColorString).withOpacity(0.7),
-                HexColor(globals.primaryColorString).withOpacity(0.6),
-              ],
+    return SafeArea(
+      child: Stack(
+        children: <Widget>[
+          Container(
+            foregroundDecoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  HexColor(globals.primaryColorString).withOpacity(0.9),
+                  HexColor(globals.primaryColorString).withOpacity(0.8),
+                  HexColor(globals.primaryColorString).withOpacity(0.7),
+                  HexColor(globals.primaryColorString).withOpacity(0.6),
+                ],
+              ),
+            ),
+            child: Container(
+              height: MediaQuery.of(context).size.height,
+              width: MediaQuery.of(context).size.width,
+              child: Image.asset(
+                ConstanceData.authImage,
+                alignment: Alignment.center,
+                fit: BoxFit.fill,
+              ),
             ),
           ),
-          child: Container(
-            height: MediaQuery.of(context).size.height,
-            width: MediaQuery.of(context).size.width,
-            child: Image.asset(
-              ConstanceData.authImage,
-              alignment: Alignment.center,
-              fit: BoxFit.fill,
-            ),
-          ),
-        ),
-        Scaffold(
-          backgroundColor: Colors.transparent,
-          body: ModalProgressHUD(
-            inAsyncCall: _isInProgress,
-            opacity: 0,
-            progressIndicator: SizedBox(),
-            child: Padding(
-              padding: EdgeInsets.only(right: 16, bottom: 20, left: 16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: <Widget>[
-                  Text("CryptoMX",
-                  style: TextStyle(
-                    fontSize: 50,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.white
-                  ),
-                  ),
-                  SizedBox(height: 30,),
-                  AnimatedOpacity(
-                    duration: Duration(milliseconds: 500),
-                    opacity: _visible ? 1.0 : 0.0,
-                    child: Text(
-                      'Maximizes your \nCrypto Assets \nwhen the market is idle',
+          Scaffold(
+            backgroundColor: Colors.transparent,
+            body: ModalProgressHUD(
+              inAsyncCall: _isInProgress,
+              opacity: 0,
+              progressIndicator: SizedBox(),
+              child: Padding(
+                padding: EdgeInsets.only(right: 16, bottom: 20, left: 16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: <Widget>[
+                    SizedBox(
+                      height: 40,
+                    ),
+                    Text(
+                      "CryptoMX",
                       style: TextStyle(
-                        color: AllCoustomTheme.getTextThemeColors(),
-                        fontSize: 35,
-                        letterSpacing: 0.8,
-                        fontWeight: FontWeight.bold,
+                          fontSize: 50,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.white),
+                    ),
+                    SizedBox(
+                      height: 30,
+                    ),
+                    AnimatedOpacity(
+                      duration: Duration(milliseconds: 500),
+                      opacity: _visible ? 1.0 : 0.0,
+                      child: Text(
+                        'Maximizes your \nCrypto Assets \nwhen the market is idle',
+                        style: TextStyle(
+                          color: AllCoustomTheme.getTextThemeColors(),
+                          fontSize: 35,
+                          letterSpacing: 0.8,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  _visible
-                      ? AnimatedOpacity(
-                          duration: Duration(milliseconds: 500),
-                          opacity: _visiblesignUpbutton ? 1.0 : 0.0,
-                          // ignore: deprecated_member_use
-                          child: FlatButton(
-                            padding: EdgeInsets.all(0),
-                            child: Container(
-                              height: 45.0,
-                              alignment: FractionalOffset.center,
-                              decoration: BoxDecoration(
-                                border: Border.all(color: Colors.white, width: 1.5),
-                                borderRadius: BorderRadius.circular(30),
-                                gradient: LinearGradient(
-                                  begin: Alignment.topLeft,
-                                  end: Alignment.bottomRight,
-                                  colors: [
-                                    globals.buttoncolor1,
-                                    globals.buttoncolor2,
-                                  ],
+                    SizedBox(
+                      height: 20,
+                    ),
+                    _visible
+                        ? AnimatedOpacity(
+                            duration: Duration(milliseconds: 500),
+                            opacity: _visiblesignUpbutton ? 1.0 : 0.0,
+                            // ignore: deprecated_member_use
+                            child: FlatButton(
+                              padding: EdgeInsets.all(0),
+                              child: Container(
+                                height: 45.0,
+                                alignment: FractionalOffset.center,
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                      color: Colors.white, width: 1.5),
+                                  borderRadius: BorderRadius.circular(30),
+                                  gradient: LinearGradient(
+                                    begin: Alignment.topLeft,
+                                    end: Alignment.bottomRight,
+                                    colors: [
+                                      globals.buttoncolor1,
+                                      globals.buttoncolor2,
+                                    ],
+                                  ),
+                                ),
+                                child: Text(
+                                  "Sign Up With E-Mail",
+                                  style: TextStyle(
+                                    color: AllCoustomTheme
+                                        .getReBlackAndWhiteThemeColors(),
+                                    letterSpacing: 0.3,
+                                  ),
                                 ),
                               ),
-                              child: Text(
-                                "Sign Up With E-Mail",
-                                style: TextStyle(
-                                  color: AllCoustomTheme.getReBlackAndWhiteThemeColors(),
-                                  letterSpacing: 0.3,
-                                ),
-                              ),
-                            ),
-                            onPressed: () async {
-                              setState(() {
-                                _isInProgress = true;
-                              });
-                              await Future.delayed(const Duration(milliseconds: 500));
-                              Navigator.pushNamedAndRemoveUntil(context, Routes.SignUp, (route) => false)
-                                  .then((onValue) {
-                                setState(() {
-                                  _isInProgress = false;
-                                });
-                              });
-                            },
-                          ),
-                        )
-                      : SizedBox(
-                          height: 48,
-                        ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  // _visible
-                  //     ? Row(
-                  //         mainAxisAlignment: MainAxisAlignment.center,
-                  //         children: <Widget>[
-                  //           Text(
-                  //             'or use socials',
-                  //             style: TextStyle(
-                  //               color: AllCoustomTheme.getTextThemeColors(),
-                  //               fontSize: ConstanceData.SIZE_TITLE14,
-                  //             ),
-                  //           ),
-                  //         ],
-                  //       )
-                  //     : SizedBox(),
-                  // SizedBox(
-                  //   height: 10,
-                  // ),
-                  // _visible
-                  //     ? AnimatedOpacity(
-                  //         duration: Duration(milliseconds: 500),
-                  //         opacity: _visiblesignUpbutton ? 1.0 : 0.0,
-                  //         // ignore: deprecated_member_use
-                  //         child: FlatButton(
-                  //           padding: EdgeInsets.all(0),
-                  //           child: new Container(
-                  //             height: 45.0,
-                  //             alignment: FractionalOffset.center,
-                  //             decoration: BoxDecoration(
-                  //               borderRadius: new BorderRadius.circular(30),
-                  //               color: AllCoustomTheme.getTextThemeColors(),
-                  //             ),
-                  //             child: GradientText(
-                  //               "Facebook",
-                  //               colors: [
-                  //                 globals.buttoncolor1,
-                  //                 globals.buttoncolor2,
-                  //               ],
-                  //               gradientType: GradientType.linear,
-                  //               style: new TextStyle(
-                  //                 letterSpacing: 0.3,
-                  //               ),
-                  //             ),
-                  //           ),
-                  //           onPressed: () async {
-                  //             setState(() {
-                  //               _isInProgress = true;
-                  //             });
-                  //             await Future.delayed(const Duration(milliseconds: 500));
-                  //             Navigator.of(context)
-                  //                 .push(
-                  //               CupertinoPageRoute<void>(
-                  //                 builder: (BuildContext context) => SelectAuthScreen(),
-                  //               ),
-                  //             )
-                  //                 .then((onValue) {
-                  //               setState(() {
-                  //                 _isInProgress = false;
-                  //               });
-                  //             });
-                  //           },
-                  //         ),
-                  //       )
-                  //     : SizedBox(
-                  //         height: 48,
-                  //       ),
-                  // SizedBox(
-                  //   height: 4,
-                  // ),
-                  // _visible
-                  //     ? AnimatedOpacity(
-                  //         duration: Duration(milliseconds: 500),
-                  //         opacity: _visiblesignUpbutton ? 1.0 : 0.0,
-                  //         // ignore: deprecated_member_use
-                  //         child: FlatButton(
-                  //           padding: EdgeInsets.all(0),
-                  //           child: new Container(
-                  //             height: 45.0,
-                  //             alignment: FractionalOffset.center,
-                  //             decoration: BoxDecoration(
-                  //               borderRadius: new BorderRadius.circular(30),
-                  //               color: AllCoustomTheme.getTextThemeColors(),
-                  //             ),
-                  //             child: GradientText(
-                  //               "Twitter",
-                  //               colors: [
-                  //                 globals.buttoncolor1,
-                  //                 globals.buttoncolor2,
-                  //               ],
-                  //               gradientType: GradientType.linear,
-                  //               style: new TextStyle(
-                  //                 letterSpacing: 0.3,
-                  //               ),
-                  //             ),
-                  //           ),
-                  //           onPressed: () async {
-                  //             setState(() {
-                  //               _isInProgress = true;
-                  //             });
-                  //             await Future.delayed(const Duration(milliseconds: 500));
-                  //             Navigator.of(context)
-                  //                 .push(
-                  //               CupertinoPageRoute<void>(
-                  //                 builder: (BuildContext context) => SelectAuthScreen(),
-                  //               ),
-                  //             )
-                  //                 .then((onValue) {
-                  //               setState(() {
-                  //                 _isInProgress = false;
-                  //               });
-                  //             });
-                  //           },
-                  //         ),
-                  //       )
-                  //     : SizedBox(
-                  //         height: 48,
-                  //       ),
-                  // SizedBox(
-                  //   height: 14,
-                  // ),
-                  _visible
-                      ? Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            GestureDetector(
-                              onTap: () async {
+                              onPressed: () async {
                                 setState(() {
                                   _isInProgress = true;
                                 });
-                                await Future.delayed(const Duration(milliseconds: 500));
-                                Navigator.pushNamedAndRemoveUntil(context, Routes.SignIn, (route) => false)
-                                    .then((onValue) {
+                                await Future.delayed(
+                                    const Duration(milliseconds: 500));
+                                Navigator.pushNamedAndRemoveUntil(
+                                    context,
+                                    Routes.SignUp,
+                                    (route) => false).then((onValue) {
                                   setState(() {
                                     _isInProgress = false;
                                   });
                                 });
                               },
-                              child: Container(
-                                height: 20,
-                                child: !_isInProgress
-                                    ? Animator<double>(
-                                        tween: Tween<double>(begin: 0.8, end: 1),
-                                        curve: Curves.easeInToLinear,
-                                        cycles: 0,
-                                        builder: (_, anim, __) => Transform.scale(
-                                          scale: anim.animation.value,
-                                          child: Text(
-                                            'Sign in with E-Mail',
-                                            style: TextStyle(
-                                              fontSize: ConstanceData.SIZE_TITLE18,
-                                              color: AllCoustomTheme.getTextThemeColors(),
+                            ),
+                          )
+                        : SizedBox(
+                            height: 48,
+                          ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    // _visible
+                    //     ? Row(
+                    //         mainAxisAlignment: MainAxisAlignment.center,
+                    //         children: <Widget>[
+                    //           Text(
+                    //             'or use socials',
+                    //             style: TextStyle(
+                    //               color: AllCoustomTheme.getTextThemeColors(),
+                    //               fontSize: ConstanceData.SIZE_TITLE14,
+                    //             ),
+                    //           ),
+                    //         ],
+                    //       )
+                    //     : SizedBox(),
+                    // SizedBox(
+                    //   height: 10,
+                    // ),
+                    // _visible
+                    //     ? AnimatedOpacity(
+                    //         duration: Duration(milliseconds: 500),
+                    //         opacity: _visiblesignUpbutton ? 1.0 : 0.0,
+                    //         // ignore: deprecated_member_use
+                    //         child: FlatButton(
+                    //           padding: EdgeInsets.all(0),
+                    //           child: new Container(
+                    //             height: 45.0,
+                    //             alignment: FractionalOffset.center,
+                    //             decoration: BoxDecoration(
+                    //               borderRadius: new BorderRadius.circular(30),
+                    //               color: AllCoustomTheme.getTextThemeColors(),
+                    //             ),
+                    //             child: GradientText(
+                    //               "Facebook",
+                    //               colors: [
+                    //                 globals.buttoncolor1,
+                    //                 globals.buttoncolor2,
+                    //               ],
+                    //               gradientType: GradientType.linear,
+                    //               style: new TextStyle(
+                    //                 letterSpacing: 0.3,
+                    //               ),
+                    //             ),
+                    //           ),
+                    //           onPressed: () async {
+                    //             setState(() {
+                    //               _isInProgress = true;
+                    //             });
+                    //             await Future.delayed(const Duration(milliseconds: 500));
+                    //             Navigator.of(context)
+                    //                 .push(
+                    //               CupertinoPageRoute<void>(
+                    //                 builder: (BuildContext context) => SelectAuthScreen(),
+                    //               ),
+                    //             )
+                    //                 .then((onValue) {
+                    //               setState(() {
+                    //                 _isInProgress = false;
+                    //               });
+                    //             });
+                    //           },
+                    //         ),
+                    //       )
+                    //     : SizedBox(
+                    //         height: 48,
+                    //       ),
+                    // SizedBox(
+                    //   height: 4,
+                    // ),
+                    // _visible
+                    //     ? AnimatedOpacity(
+                    //         duration: Duration(milliseconds: 500),
+                    //         opacity: _visiblesignUpbutton ? 1.0 : 0.0,
+                    //         // ignore: deprecated_member_use
+                    //         child: FlatButton(
+                    //           padding: EdgeInsets.all(0),
+                    //           child: new Container(
+                    //             height: 45.0,
+                    //             alignment: FractionalOffset.center,
+                    //             decoration: BoxDecoration(
+                    //               borderRadius: new BorderRadius.circular(30),
+                    //               color: AllCoustomTheme.getTextThemeColors(),
+                    //             ),
+                    //             child: GradientText(
+                    //               "Twitter",
+                    //               colors: [
+                    //                 globals.buttoncolor1,
+                    //                 globals.buttoncolor2,
+                    //               ],
+                    //               gradientType: GradientType.linear,
+                    //               style: new TextStyle(
+                    //                 letterSpacing: 0.3,
+                    //               ),
+                    //             ),
+                    //           ),
+                    //           onPressed: () async {
+                    //             setState(() {
+                    //               _isInProgress = true;
+                    //             });
+                    //             await Future.delayed(const Duration(milliseconds: 500));
+                    //             Navigator.of(context)
+                    //                 .push(
+                    //               CupertinoPageRoute<void>(
+                    //                 builder: (BuildContext context) => SelectAuthScreen(),
+                    //               ),
+                    //             )
+                    //                 .then((onValue) {
+                    //               setState(() {
+                    //                 _isInProgress = false;
+                    //               });
+                    //             });
+                    //           },
+                    //         ),
+                    //       )
+                    //     : SizedBox(
+                    //         height: 48,
+                    //       ),
+                    // SizedBox(
+                    //   height: 14,
+                    // ),
+                    _visible
+                        ? Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              GestureDetector(
+                                onTap: () async {
+                                  setState(() {
+                                    _isInProgress = true;
+                                  });
+                                  await Future.delayed(
+                                      const Duration(milliseconds: 500));
+                                  Navigator.pushNamedAndRemoveUntil(
+                                      context,
+                                      Routes.SignIn,
+                                      (route) => false).then((onValue) {
+                                    setState(() {
+                                      _isInProgress = false;
+                                    });
+                                  });
+                                },
+                                child: Container(
+                                  height: 20,
+                                  child: !_isInProgress
+                                      ? Animator<double>(
+                                          tween:
+                                              Tween<double>(begin: 0.8, end: 1),
+                                          curve: Curves.easeInToLinear,
+                                          cycles: 0,
+                                          builder: (_, anim, __) =>
+                                              Transform.scale(
+                                            scale: anim.animation.value,
+                                            child: Text(
+                                              'Sign in with E-Mail',
+                                              style: TextStyle(
+                                                fontSize:
+                                                    ConstanceData.SIZE_TITLE18,
+                                                color: AllCoustomTheme
+                                                    .getTextThemeColors(),
+                                              ),
                                             ),
                                           ),
+                                        )
+                                      : Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: <Widget>[
+                                            CupertinoActivityIndicator(
+                                              radius: 12,
+                                            ),
+                                          ],
                                         ),
-                                      )
-                                    : Row(
-                                        mainAxisAlignment: MainAxisAlignment.center,
-                                        children: <Widget>[
-                                          CupertinoActivityIndicator(
-                                            radius: 12,
-                                          ),
-                                        ],
-                                      ),
+                                ),
                               ),
-                            ),
-                          ],
-                        )
-                      : SizedBox(),
-                ],
+                            ],
+                          )
+                        : SizedBox(),
+                  ],
+                ),
               ),
             ),
-          ),
-        )
-      ],
+          )
+        ],
+      ),
     );
   }
 }

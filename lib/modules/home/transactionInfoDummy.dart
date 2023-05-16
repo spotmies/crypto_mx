@@ -1,16 +1,12 @@
 import 'dart:convert';
 import 'dart:developer';
 
-import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:cryptomarket/modules/home/transactionHist.dart';
 import 'package:cryptomarket/repo/api_methods.dart';
 import 'package:cryptomarket/repo/api_urls.dart';
 import 'package:cryptomarket/utils/shared_preferences.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import '../../constance/global.dart';
-import '../../models/Transaction.dart';
-import '../../models/Withdraw.dart';
 
 class TransactionInfo extends StatefulWidget {
   final dynamic id;
@@ -60,6 +56,7 @@ class _TransactionInfoState extends State<TransactionInfo> {
       );
     }
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: Text("Transaction Info"),
       ),
@@ -71,158 +68,307 @@ class _TransactionInfoState extends State<TransactionInfo> {
           children: [
             Row(
               children: [
-                Text(
-                  "Coin Name:",
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w600,
-                      fontSize: 20),
+                Container(
+                  padding: const EdgeInsets.only(left: 2.0),
+                  height: height * 0.035,
+                  width: width * 0.35,
+                  alignment: Alignment.centerLeft,
+                  decoration: BoxDecoration(
+                      color: Colors.grey[800],
+                      borderRadius: BorderRadius.circular(5)),
+                  child: Text(
+                    "Coin Name:",
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w600,
+                        fontSize: width * 0.045),
+                  ),
                 ),
                 Spacer(),
-                Text(
-                  coinsDetails["coin_name"],
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w600,
-                      fontSize: 20),
-                ),
-              ],
-            ),
-            Row(
-              children: [
-                Text(
-                  "Fund:",
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w600,
-                      fontSize: 20),
-                ),
-                Spacer(),
-                Text(
-                  coinsDetails["amount"].toString(),
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w600,
-                      fontSize: 20),
-                ),
-              ],
-            ),
-            Row(
-              children: [
-                Text(
-                  "TimeStamp:",
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w600,
-                      fontSize: 20),
-                ),
-                Spacer(),
-                Text(
-                  coinsDetails["updated_at"],
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w600,
-                      fontSize: 15),
-                ),
-              ],
-            ),
-            Row(
-              children: [
-                Text(
-                  "Total Days:",
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w600,
-                      fontSize: 20),
-                ),
-                Spacer(),
-                Text(
-                  "45",
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w600,
-                      fontSize: 20),
-                ),
-              ],
-            ),
-            Row(
-              children: [
-                Text(
-                  "Percentage:",
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w600,
-                      fontSize: 20),
-                ),
-                Spacer(),
-                Text(
-                  "1",
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w600,
-                      fontSize: 20),
-                ),
-              ],
-            ),
-            Row(
-              children: [
-                Text(
-                  "Stake Status:",
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w600,
-                      fontSize: 20),
-                ),
-                Spacer(),
-                Text(
-                  coinsDetails["status"] != 0 ? "Active" : "Inactive",
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w600,
-                      fontSize: 20),
-                ),
-              ],
-            ),
-            Row(
-              children: [
-                Text(
-                  "Stake Approval:",
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w600,
-                      fontSize: 20),
-                ),
-                Spacer(),
-                Text(
-                  coinsDetails["status"] == 0 ? "Rejected" : "Approved",
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w600,
-                      fontSize: 20),
-                ),
-              ],
-            ),
-            Row(
-              children: [
-                Text(
-                  "Days Left:",
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w600,
-                      fontSize: 20),
-                ),
-                Spacer(),
-                Text(
-                  "-1",
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w600,
-                      fontSize: 20),
+                Container(
+                  padding: const EdgeInsets.only(right: 2.0),
+                  height: height * 0.035,
+                  width: width * 0.58,
+                  alignment: Alignment.centerRight,
+                  decoration: BoxDecoration(
+                      color: Colors.grey[200],
+                      borderRadius: BorderRadius.circular(5)),
+                  child: Text(
+                    coinsDetails["coin_name"],
+                    style: TextStyle(
+                        color: Colors.grey[900],
+                        fontWeight: FontWeight.w600,
+                        fontSize: width * 0.045),
+                  ),
                 ),
               ],
             ),
             SizedBox(
-              height: 20,
+              height: height * 0.01,
+            ),
+            Row(
+              children: [
+                Container(
+                  padding: const EdgeInsets.only(left: 2.0),
+                  height: height * 0.035,
+                  width: width * 0.35,
+                  alignment: Alignment.centerLeft,
+                  decoration: BoxDecoration(
+                      color: Colors.grey[800],
+                      borderRadius: BorderRadius.circular(5)),
+                  child: Text(
+                    "Fund:",
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w600,
+                        fontSize: width * 0.045),
+                  ),
+                ),
+                Spacer(),
+                Container(
+                  padding: const EdgeInsets.only(right: 2.0),
+                  height: height * 0.035,
+                  width: width * 0.58,
+                  alignment: Alignment.centerRight,
+                  decoration: BoxDecoration(
+                      color: Colors.grey[200],
+                      borderRadius: BorderRadius.circular(5)),
+                  child: Text(
+                    coinsDetails["amount"].toString(),
+                    style: TextStyle(
+                        color: Colors.grey[900],
+                        fontWeight: FontWeight.w600,
+                        fontSize: width * 0.045),
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: height * 0.01,
+            ),
+            Row(
+              children: [
+                Container(
+                  padding: const EdgeInsets.only(left: 2.0),
+                  height: height * 0.035,
+                  width: width * 0.35,
+                  alignment: Alignment.centerLeft,
+                  decoration: BoxDecoration(
+                      color: Colors.grey[800],
+                      borderRadius: BorderRadius.circular(5)),
+                  child: Text(
+                    "TimeStamp:",
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w600,
+                        fontSize: width * 0.045),
+                  ),
+                ),
+                Spacer(),
+                Container(
+                  padding: const EdgeInsets.only(right: 2.0),
+                  height: height * 0.035,
+                  width: width * 0.58,
+                  alignment: Alignment.centerRight,
+                  decoration: BoxDecoration(
+                      color: Colors.grey[200],
+                      borderRadius: BorderRadius.circular(5)),
+                  child: Text(
+                    coinsDetails["updated_at"],
+                    style: TextStyle(
+                        color: Colors.grey[900],
+                        fontWeight: FontWeight.w600,
+                        fontSize: width * 0.045),
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: height * 0.01,
+            ),
+            Row(
+              children: [
+                Container(
+                  padding: const EdgeInsets.only(left: 2.0),
+                  height: height * 0.035,
+                  width: width * 0.35,
+                  alignment: Alignment.centerLeft,
+                  decoration: BoxDecoration(
+                      color: Colors.grey[800],
+                      borderRadius: BorderRadius.circular(5)),
+                  child: Text(
+                    "Total Days:",
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w600,
+                        fontSize: width * 0.045),
+                  ),
+                ),
+                Spacer(),
+                Container(
+                  padding: const EdgeInsets.only(right: 2.0),
+                  height: height * 0.035,
+                  width: width * 0.58,
+                  alignment: Alignment.centerRight,
+                  decoration: BoxDecoration(
+                      color: Colors.grey[200],
+                      borderRadius: BorderRadius.circular(5)),
+                  child: Text(
+                    "45",
+                    style: TextStyle(
+                        color: Colors.grey[900],
+                        fontWeight: FontWeight.w600,
+                        fontSize: width * 0.045),
+                  ),
+                ),
+              ],
+            ),
+            // Row(
+            //   children: [
+            //     Text(
+            //       "Percentage:",
+            //       style: TextStyle(
+            //           color: Colors.white,
+            //           fontWeight: FontWeight.w600,
+            //           fontSize: width * 0.055),
+            //     ),
+            //     Spacer(),
+            //     Text(
+            //       "1",
+            //       style: TextStyle(
+            //           color: Colors.white,
+            //           fontWeight: FontWeight.w600,
+            //           fontSize: width * 0.055),
+            //     ),
+            //   ],
+            // ),
+            SizedBox(
+              height: height * 0.01,
+            ),
+            Row(
+              children: [
+                Container(
+                  padding: const EdgeInsets.only(left: 2.0),
+                  height: height * 0.035,
+                  width: width * 0.35,
+                  alignment: Alignment.centerLeft,
+                  decoration: BoxDecoration(
+                      color: Colors.grey[800],
+                      borderRadius: BorderRadius.circular(5)),
+                  child: Text(
+                    "Stake Status:",
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w600,
+                        fontSize: width * 0.045),
+                  ),
+                ),
+                Spacer(),
+                Container(
+                  padding: const EdgeInsets.only(right: 2.0),
+                  height: height * 0.035,
+                  width: width * 0.58,
+                  alignment: Alignment.centerRight,
+                  decoration: BoxDecoration(
+                      color: Colors.grey[200],
+                      borderRadius: BorderRadius.circular(5)),
+                  child: Text(
+                    coinsDetails["status"] != 0 ? "Active" : "Inactive",
+                    style: TextStyle(
+                        color: Colors.grey[900],
+                        fontWeight: FontWeight.w600,
+                        fontSize: width * 0.045),
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: height * 0.01,
+            ),
+            Row(
+              children: [
+                Container(
+                  padding: const EdgeInsets.only(left: 2.0),
+                  height: height * 0.035,
+                  width: width * 0.35,
+                  alignment: Alignment.centerLeft,
+                  decoration: BoxDecoration(
+                      color: Colors.grey[800],
+                      borderRadius: BorderRadius.circular(5)),
+                  child: Text(
+                    "Stake Approval:",
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w600,
+                        fontSize: width * 0.045),
+                  ),
+                ),
+                Spacer(),
+                Container(
+                  padding: const EdgeInsets.only(right: 2.0),
+                  height: height * 0.035,
+                  width: width * 0.58,
+                  alignment: Alignment.centerRight,
+                  decoration: BoxDecoration(
+                      color: Colors.grey[200],
+                      borderRadius: BorderRadius.circular(5)),
+                  child: Text(
+                    coinsDetails["status"] == 0
+                        ? "Pending"
+                        : coinsDetails["status"] == 1
+                            ? "Approved"
+                            : "Rejected",
+                    style: TextStyle(
+                        color: Colors.grey[900],
+                        fontWeight: FontWeight.w600,
+                        fontSize: width * 0.045),
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: height * 0.01,
+            ),
+            Row(
+              children: [
+                Container(
+                  padding: const EdgeInsets.only(left: 2.0),
+                  height: height * 0.035,
+                  width: width * 0.35,
+                  alignment: Alignment.centerLeft,
+                  decoration: BoxDecoration(
+                      color: Colors.grey[800],
+                      borderRadius: BorderRadius.circular(5)),
+                  child: Text(
+                    "Days Left:",
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w600,
+                        fontSize: width * 0.045),
+                  ),
+                ),
+                Spacer(),
+                Container(
+                  padding: const EdgeInsets.only(right: 2.0),
+                  height: height * 0.035,
+                  width: width * 0.58,
+                  alignment: Alignment.centerRight,
+                  decoration: BoxDecoration(
+                      color: Colors.grey[200],
+                      borderRadius: BorderRadius.circular(5)),
+                  child: Text(
+                    coinsDetails["days_left"].toString(),
+                    style: TextStyle(
+                        color: Colors.grey[900],
+                        fontWeight: FontWeight.w600,
+                        fontSize: width * 0.045),
+                  ),
+                ),
+              ],
+            ),
+
+            SizedBox(
+              height: 30,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -232,7 +378,7 @@ class _TransactionInfoState extends State<TransactionInfo> {
                   style: TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.w600,
-                      fontSize: 25),
+                      fontSize: width * 0.07),
                 ),
               ],
             ),
@@ -284,22 +430,32 @@ class _TransactionInfoState extends State<TransactionInfo> {
                       borderRadius: BorderRadius.all(Radius.circular(32.0))),
                 ),
                 onPressed: () async {
-                  var user = await getUserData();
-                  var prm = {
-                    "api_secret": "oApF8z0hmu",
-                    "user_id": user["user"]["id"].toString(),
-                    "staking_id": widget.id.toString(),
-                    "amount": coinsDetails["amount"].toString(),
-                    "withdraw_address": wAdd.toString(),
-                    "coin_id": coinsDetails["coin_id"].toString()
-                  };
+                  if (wAdd != null) {
+                    var user = await getUserData();
+                    var prm = {
+                      "api_secret": "oApF8z0hmu",
+                      "user_id": user["user"]["id"].toString(),
+                      "staking_id": widget.id.toString(),
+                      "amount": coinsDetails["amount"].toString(),
+                      "withdraw_address": wAdd.toString(),
+                      "coin_id": coinsDetails["coin_id"].toString()
+                    };
 
-                  var res =
-                      await Server().getMethodParems(API.withdrawEarning, prm);
-                  log(res.statusCode.toString());
-                  if (res.statusCode == 200) {
+                    var res = await Server()
+                        .getMethodParems(API.withdrawEarning, prm);
+                    log(res.statusCode.toString());
+                    if (res.statusCode == 200) {
+                      final snackBar = SnackBar(
+                        content: const Text('Withdrawl Earning!'),
+                      );
+
+                      // Find the ScaffoldMessenger in the widget tree
+                      // and use it to show a SnackBar.
+                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                    }
+                  } else {
                     final snackBar = SnackBar(
-                      content: const Text('Withdrawl Earning!'),
+                      content: const Text('Enter Wallet Address!'),
                     );
 
                     // Find the ScaffoldMessenger in the widget tree
@@ -392,7 +548,8 @@ class _TransactionInfoState extends State<TransactionInfo> {
                 onPressed: () async {
                   Navigator.of(context).push(
                     CupertinoPageRoute(
-                      builder: (BuildContext context) => History(id:widget.id),
+                      builder: (BuildContext context) =>
+                          History(id: widget.id, depo: coinsDetails["amount"]),
                     ),
                   );
                 },

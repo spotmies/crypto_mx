@@ -1,21 +1,9 @@
 import 'dart:convert';
-import 'dart:developer';
-
-import 'package:animator/animator.dart';
-import 'package:cryptomarket/auth/forgotPasswordScreen.dart';
-import 'package:cryptomarket/constance/constance.dart';
 import 'package:cryptomarket/constance/routes.dart';
-import 'package:cryptomarket/constance/themes.dart';
 import 'package:cryptomarket/repo/api_methods.dart';
 import 'package:cryptomarket/repo/api_urls.dart';
 import 'package:cryptomarket/utils/shared_preferences.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:cryptomarket/constance/global.dart' as globals;
-import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
-import 'package:amplify_authenticator/amplify_authenticator.dart';
-import '../modules/home/homeScreen.dart';
-import 'signUpScreen.dart';
 
 class SignInScreen extends StatefulWidget {
   @override
@@ -52,6 +40,7 @@ class _SignInScreenState extends State<SignInScreen> {
                   padding: const EdgeInsets.all(8.0),
                   child: TextFormField(
                       controller: password,
+                      obscureText: true,
                       keyboardType: TextInputType.emailAddress,
                       validator: (value) =>
                           value!.isEmpty ? 'Password cannot be blank' : null,
@@ -79,6 +68,21 @@ class _SignInScreenState extends State<SignInScreen> {
                             Navigator.pushNamedAndRemoveUntil(
                                     context, Routes.Home, (route) => false)
                                 .then((onValue) {});
+                          } else {
+                            final snackBar = SnackBar(
+                              content: const Text('Invalid Creditials'),
+                              action: SnackBarAction(
+                                label: 'Close',
+                                onPressed: () {
+                                  // Some code to undo the change.
+                                },
+                              ),
+                            );
+
+                            // Find the ScaffoldMessenger in the widget tree
+                            // and use it to show a SnackBar.
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(snackBar);
                           }
                         }
                       }

@@ -15,4 +15,8 @@ class API {
   static var getAllSteakings = "/api/get-user-all-stakings";
   static var userSingleSteak = "/api/get-user-single-staking";
   static var withdrawEarning = "/api/make-staking-rewards-withdraw";
+  static var otpVerify = "/api/verify-otp";
+  static var resendOTP = "/api/resend-otp";
+  static var changePassword = "/api/update-password";
+  static var userDetails = "/api/get-user-details";
 }

@@ -10,8 +10,6 @@ import '../../constance/global.dart';
 import '../../constance/themes.dart';
 import '../../design/appBar.dart';
 import 'package:flutter/services.dart';
-import 'package:amplify_flutter/amplify_flutter.dart';
-import '../../models/ModelProvider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
 class TransactionPage extends StatefulWidget {
@@ -31,7 +29,8 @@ class _TransactionPageState extends State<TransactionPage> {
   var amount;
   var transact_id;
   Future<void> _copyToClipboard() async {
-    await Clipboard.setData(ClipboardData(text: this.tId));
+    await Clipboard.setData(
+        ClipboardData(text: coinDetails["deposit_address"]));
     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
       content: Text('Copied to clipboard'),
     ));
@@ -70,6 +69,7 @@ class _TransactionPageState extends State<TransactionPage> {
       );
     }
     return Scaffold(
+      backgroundColor: AllCoustomTheme.getThemeData().backgroundColor,
       appBar: MainAppBar(
         title: Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -109,12 +109,15 @@ class _TransactionPageState extends State<TransactionPage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(this.tId.substring(0, 10) + '...'),
+                Text(
+                  coinDetails["deposit_address"].substring(0, 10) + '...',
+                  style: TextStyle(color: Colors.white),
+                ),
                 IconButton(
                     onPressed: () async {
                       await this._copyToClipboard();
                     },
-                    icon: Icon(Icons.content_copy))
+                    icon: Icon(Icons.content_copy, color: Colors.white))
               ],
             ),
             Row(
@@ -123,9 +126,9 @@ class _TransactionPageState extends State<TransactionPage> {
                 Text(
                   'Days: ' + widget.planDetails["min_days"].toString(),
                   style: TextStyle(
-                    fontSize: width * 0.05,
-                    fontWeight: FontWeight.w600,
-                  ),
+                      fontSize: width * 0.05,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.white),
                 ),
                 SizedBox(
                   width: width * 0.1,
@@ -136,9 +139,9 @@ class _TransactionPageState extends State<TransactionPage> {
                               widget.planDetails["daily_returns"].toString())
                           .toString(),
                   style: TextStyle(
-                    fontSize: width * 0.05,
-                    fontWeight: FontWeight.w600,
-                  ),
+                      fontSize: width * 0.05,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.white),
                 ),
               ],
             ),
@@ -151,10 +154,12 @@ class _TransactionPageState extends State<TransactionPage> {
                 keyboardType: TextInputType.number,
                 inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                 controller: AmountController,
+                style: TextStyle(color: Colors.white),
                 decoration: InputDecoration(
-                    hintStyle: TextStyle(color: Colors.grey),
+                    hintStyle: TextStyle(color: Colors.white),
                     hintText: 'Enter the amount',
                     fillColor: Colors.white,
+                    labelStyle: TextStyle(color: Colors.grey[500]),
                     filled: false,
                     hoverColor: Colors.white,
                     labelText: 'amount',
@@ -178,10 +183,12 @@ class _TransactionPageState extends State<TransactionPage> {
               width: width * 0.9,
               child: TextField(
                 controller: TransactionController,
+                style: TextStyle(color: Colors.white),
                 decoration: InputDecoration(
-                    hintStyle: TextStyle(color: Colors.grey),
+                    hintStyle: TextStyle(color: Colors.white),
                     hintText: 'Enter the transaction id',
                     fillColor: Colors.white,
+                    labelStyle: TextStyle(color: Colors.grey[500]),
                     filled: false,
                     hoverColor: Colors.white,
                     labelText: 'transaction id',
@@ -211,58 +218,70 @@ class _TransactionPageState extends State<TransactionPage> {
                       borderRadius: BorderRadius.all(Radius.circular(32.0))),
                 ),
                 onPressed: () async {
-                  dynamic uid = await getUserData();
+                  if (amount != null && transact_id != null) {
+                    dynamic uid = await getUserData();
 
-                  var prm = {
-                    "user_id": uid["user"]["id"].toString(),
-                    "plan_id": widget.planDetails["plan_id"].toString(),
-                    "coin_id": widget.coinId.toString(),
-                    "amount": amount.toString(),
-                    "transaction_hash": transact_id.toString(),
-                    "api_secret": "oApF8z0hmu"
-                  };
+                    var prm = {
+                      "user_id": uid["user"]["id"].toString(),
+                      "plan_id": widget.planDetails["plan_id"].toString(),
+                      "coin_id": widget.coinId.toString(),
+                      "amount": amount.toString(),
+                      "transaction_hash": transact_id.toString(),
+                      "api_secret": "oApF8z0hmu"
+                    };
 
-                  dynamic plans = await Server()
-                      .getMethodParems(API.newStackingRequest, prm);
-                  dynamic plItems = jsonDecode(plans.body);
-                  log(plItems.toString());
-                  if (plItems["response"] == "success") {
-                    showDialog(
-                      context: context,
-                      builder: (context) {
-                        return Dialog(
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(40)),
-                          elevation: 16,
-                          child: Container(
-                              height: 200,
-                              child: Column(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  Text("Transaction submitted successfully"),
-                                  ElevatedButton(
-                                    style: ElevatedButton.styleFrom(
-                                      primary: Colors.blueAccent, // background
-                                      onPrimary: Colors.white, // foreground
-                                      shape: const RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(32.0))),
-                                    ),
-                                    onPressed: () {
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  HomeScreen()));
-                                    },
-                                    child: Text("Go to Home"),
-                                  )
-                                ],
-                              )),
-                        );
-                      },
+                    dynamic plans = await Server()
+                        .getMethodParems(API.newStackingRequest, prm);
+                    dynamic plItems = jsonDecode(plans.body);
+                    log(plItems.toString());
+                    if (plItems["response"] == "success") {
+                      showDialog(
+                        context: context,
+                        builder: (context) {
+                          return Dialog(
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(40)),
+                            elevation: 16,
+                            child: Container(
+                                height: 200,
+                                child: Column(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    Text("Transaction submitted successfully"),
+                                    ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                        primary:
+                                            Colors.blueAccent, // background
+                                        onPrimary: Colors.white, // foreground
+                                        shape: const RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(32.0))),
+                                      ),
+                                      onPressed: () {
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    HomeScreen()));
+                                      },
+                                      child: Text("Go to Home"),
+                                    )
+                                  ],
+                                )),
+                          );
+                        },
+                      );
+                    }
+                  }
+                  {
+                    final snackBar = SnackBar(
+                      content: const Text('Textfield can not be empty!'),
                     );
+
+                    // Find the ScaffoldMessenger in the widget tree
+                    // and use it to show a SnackBar.
+                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
                   }
                   // var transact = new Transaction(
                   //     amount: this.amount.toDouble(),

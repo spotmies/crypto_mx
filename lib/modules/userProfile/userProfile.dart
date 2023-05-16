@@ -1,8 +1,14 @@
+import 'dart:convert';
+import 'dart:developer';
+
 import 'package:animator/animator.dart';
 import 'package:cryptomarket/constance/constance.dart';
 import 'package:cryptomarket/constance/global.dart';
 import 'package:cryptomarket/constance/themes.dart';
 import 'package:cryptomarket/modules/chagePIN/changePassword.dart';
+import 'package:cryptomarket/repo/api_methods.dart';
+import 'package:cryptomarket/repo/api_urls.dart';
+import 'package:cryptomarket/utils/shared_preferences.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:cryptomarket/constance/global.dart' as globals;
@@ -21,6 +27,26 @@ class _UserProfileState extends State<UserProfile> {
   void initState() {
     super.initState();
     loadUserDetails();
+    getUser();
+  }
+
+  dynamic uDetails;
+
+  getUser() async {
+    dynamic user = await getUserData();
+    var prm = {
+      "api_secret": "oApF8z0hmu",
+      "user_id": user["user"]["id"].toString(),
+    };
+    // print("qwertyuiop" + loc.toString());
+    dynamic res = await Server().getMethodParems(API.userDetails, prm);
+    log(res.body.toString());
+    if (res.statusCode == 200) {
+      setState(() {
+        uDetails = jsonDecode(res.body);
+      });
+      print('$uDetails');
+    }
   }
 
   loadUserDetails() async {
@@ -42,6 +68,13 @@ class _UserProfileState extends State<UserProfile> {
   Widget build(BuildContext context) {
     AppBar appBar = AppBar();
     double appBarheight = appBar.preferredSize.height;
+    if (uDetails == null) {
+      return Center(
+        child: CircularProgressIndicator(
+          color: Colors.white,
+        ),
+      );
+    }
     return Stack(
       children: <Widget>[
         Container(
@@ -85,10 +118,13 @@ class _UserProfileState extends State<UserProfile> {
                                     Navigator.pop(context);
                                   },
                                   child: Animator<Offset>(
-                                    tween: Tween<Offset>(begin: Offset(0, 0), end: Offset(0.2, 0)),
+                                    tween: Tween<Offset>(
+                                        begin: Offset(0, 0),
+                                        end: Offset(0.2, 0)),
                                     duration: Duration(milliseconds: 500),
                                     cycles: 0,
-                                    builder: (_, anim, __) => FractionalTranslation(
+                                    builder: (_, anim, __) =>
+                                        FractionalTranslation(
                                       translation: anim.value,
                                       child: InkWell(
                                         highlightColor: Colors.transparent,
@@ -98,7 +134,8 @@ class _UserProfileState extends State<UserProfile> {
                                         },
                                         child: Icon(
                                           Icons.arrow_back_ios,
-                                          color: AllCoustomTheme.getTextThemeColors(),
+                                          color: AllCoustomTheme
+                                              .getTextThemeColors(),
                                         ),
                                       ),
                                     ),
@@ -115,7 +152,8 @@ class _UserProfileState extends State<UserProfile> {
                                         'User Profile',
                                         textAlign: TextAlign.center,
                                         style: TextStyle(
-                                          color: AllCoustomTheme.getTextThemeColors(),
+                                          color: AllCoustomTheme
+                                              .getTextThemeColors(),
                                           fontWeight: FontWeight.bold,
                                           fontSize: ConstanceData.SIZE_TITLE20,
                                         ),
@@ -128,14 +166,13 @@ class _UserProfileState extends State<UserProfile> {
                             SizedBox(
                               height: 40,
                             ),
-
-
                             Row(
                               children: <Widget>[
                                 Text(
-                                  'E-Mail',
+                                  uDetails["mobile"],
                                   style: TextStyle(
-                                    color: AllCoustomTheme.getsecoundTextThemeColor(),
+                                    color: AllCoustomTheme
+                                        .getsecoundTextThemeColor(),
                                     fontSize: ConstanceData.SIZE_TITLE16,
                                     fontWeight: FontWeight.bold,
                                   ),
@@ -170,20 +207,23 @@ class _UserProfileState extends State<UserProfile> {
                               height: 10,
                             ),
                             InkWell(
-                              onTap: (){
+                              onTap: () {
                                 Navigator.of(context).push(
                                   CupertinoPageRoute(
-                                    builder: (BuildContext context) => ChangePassword(),
+                                    builder: (BuildContext context) =>
+                                        ChangePassword(),
                                   ),
                                 );
                               },
                               child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: <Widget>[
                                   Text(
                                     'Change Password',
                                     style: TextStyle(
-                                      color: AllCoustomTheme.getTextThemeColors(),
+                                      color:
+                                          AllCoustomTheme.getTextThemeColors(),
                                     ),
                                   ),
                                   AnimatedForwardArrow(

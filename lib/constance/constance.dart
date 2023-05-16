@@ -9,6 +9,7 @@ class ConstanceData {
   static final clapImage = "assets/clap.png";
   static final sparklesImage = "assets/sparkles.png";
   static final barCodeImage = "assets/barcode.png";
+  static final splash = "assets/splash.json";
 
   static const NoInternet = 'Check your internet connection please';
   static const GotInternet = 'Your internet connection is online';

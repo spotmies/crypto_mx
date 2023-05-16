@@ -1,10 +1,11 @@
 import 'package:cryptomarket/constance/constance.dart';
 import 'package:cryptomarket/constance/routes.dart';
 import 'package:cryptomarket/constance/themes.dart';
+import 'package:cryptomarket/utils/shared_preferences.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:cryptomarket/constance/global.dart' as globals;
-import 'package:amplify_flutter/amplify_flutter.dart';
+import 'package:lottie/lottie.dart';
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -22,7 +23,7 @@ class _SplashScreenState extends State<SplashScreen>
     super.initState();
     _loadNextScreen();
     animationController =
-        AnimationController(duration: const Duration(seconds: 5), vsync: this);
+        AnimationController(duration: const Duration(seconds: 2), vsync: this);
     animation = Tween<double>(begin: 0, end: 150).animate(animationController)
       ..addListener(() {
         setState(() {});
@@ -37,9 +38,11 @@ class _SplashScreenState extends State<SplashScreen>
   }
 
   _loadNextScreen() async {
-    await Future.delayed(const Duration(seconds: 5));
+    await Future.delayed(const Duration(seconds: 6));
+    dynamic user = await getUserData();
+
     print(globals.isSignedIn);
-    globals.isSignedIn
+    user != null
         ? Navigator.pushReplacementNamed(context, Routes.Home)
         : Navigator.pushReplacementNamed(context, Routes.Auth);
   }
@@ -68,15 +71,15 @@ class _SplashScreenState extends State<SplashScreen>
           ),
         ),
         Scaffold(
-          backgroundColor: Colors.transparent,
+          backgroundColor: Colors.black,
           body: Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Container(
-                  width: animation.value,
-                  height: animation.value,
-                  child: Image.asset(ConstanceData.appLogo),
+                  width: animation.value * 3,
+                  height: animation.value * 3,
+                  child: Lottie.asset(ConstanceData.splash),
                 ),
                 SizedBox(
                   height: 150,

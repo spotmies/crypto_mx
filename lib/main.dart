@@ -20,9 +20,6 @@ import 'models/ModelProvider.dart';
 import 'package:amplify_api/amplify_api.dart';
 import 'auth/signInScreen.dart';
 import 'auth/signUpScreen.dart';
-import 'modules/introduction/introductionScreen.dart';
-import 'modules/introduction/swipeIndtroduction.dart';
-import 'package:amplify_datastore_plugin_interface/amplify_datastore_plugin_interface.dart';
 
 var portfolioMap;
 List marketListData = [];
